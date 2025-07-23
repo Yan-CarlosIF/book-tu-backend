@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "module": "nodenext",
+    "module": "commonjs",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "baseUrl": "./src",
@@ -16,7 +16,8 @@
     "noImplicitAny": true,
     "strictPropertyInitialization": false,
     "skipLibCheck": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "typeRoots": ["node_modules/@types"]
   },
   "include": ["src/**/*"],
   "exclude": ["dist", "node_modules"]
