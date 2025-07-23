@@ -1,17 +1,11 @@
 import { env } from "config/env.ts";
 import { RateLimiterRedis } from "rate-limiter-flexible";
 import type { Request, Response, NextFunction } from "express";
-import { createClient } from "redis";
+import redis from "redis";
 
-const redisClient = createClient({
+const redisClient = redis.createClient({
   url: env.REDIS_URL,
 });
-
-redisClient.on("error", (err) => {
-  console.error("Redis Client Error", err);
-});
-
-await redisClient.connect();
 
 const limiter = new RateLimiterRedis({
   storeClient: redisClient,
