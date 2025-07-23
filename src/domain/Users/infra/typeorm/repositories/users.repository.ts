@@ -1,3 +1,4 @@
+import { ICreateUserDTO } from "domain/Users/dto/Icreate-user.dto";
 import { IUsersRepository } from "domain/Users/repositories/Iusers.repository";
 import { getRepository, Repository } from "typeorm";
 
@@ -11,16 +12,14 @@ export class UsersRepository implements IUsersRepository {
   }
 
   async create({
-    id,
     login,
     name,
     password,
     permission,
     registration,
     role,
-  }: User): Promise<void> {
+  }: ICreateUserDTO): Promise<void> {
     const user = this.repository.create({
-      id,
       login,
       name,
       password,

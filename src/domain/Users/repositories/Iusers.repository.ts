@@ -1,5 +1,5 @@
-import { User } from "../infra/typeorm/entities/User";
+import { ICreateUserDTO } from "../dto/Icreate-user.dto";
 
 export interface IUsersRepository {
-  create(user: User): Promise<void>;
+  create(user: ICreateUserDTO): Promise<void>;
 }

@@ -23,7 +23,7 @@ export class User {
   @Column("varchar")
   password: string;
 
-  @Column("varchar")
+  @Column("varchar", { nullable: true, default: null })
   role: string;
 
   @Column({

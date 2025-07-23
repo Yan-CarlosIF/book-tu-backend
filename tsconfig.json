@@ -4,7 +4,6 @@
     "module": "commonjs",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "baseUrl": "./src",
     "paths": {
       "@/*": ["./src/*"]
     },
@@ -19,6 +18,6 @@
     "allowImportingTsExtensions": true,
     "typeRoots": ["node_modules/@types"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "jest.config.ts"],
   "exclude": ["dist", "node_modules"]
 }
