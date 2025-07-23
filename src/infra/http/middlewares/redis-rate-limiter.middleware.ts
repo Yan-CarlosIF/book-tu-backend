@@ -1,8 +1,9 @@
-import { env } from "config/env.ts";
 import type { NextFunction, Request, Response } from "express";
-import { AppError } from "infra/errors/app-error";
 import { RateLimiterRedis } from "rate-limiter-flexible";
 import redis from "redis";
+
+import { env } from "@/config/env.ts";
+import { AppError } from "@/infra/errors/app-error";
 
 const redisClient = redis.createClient({
   url: env.REDIS_URL,

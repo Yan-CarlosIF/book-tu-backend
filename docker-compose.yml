@@ -12,17 +12,18 @@ services:
       - pgdata:/data/postgres
 
   redis:
+    container_name: booktu-redis
     image: redis:alpine
     ports:
       - 6379:6379
   app:
     build: .
     container_name: booktu-api
+    env_file:
+      - .env
     ports:
       - 3333:3333
     command: npm run dev
-    env_file:
-      - .env
     volumes:
       - .:/usr/app
       - /usr/app/node_modules

@@ -1,6 +1,7 @@
-import { ICreateUserDTO } from "domain/Users/dto/Icreate-user.dto";
-import { IUsersRepository } from "domain/Users/repositories/Iusers.repository";
 import { getRepository, Repository } from "typeorm";
+
+import { ICreateUserDTO } from "@/domain/Users/dto/Icreate-user.dto";
+import { IUsersRepository } from "@/domain/Users/repositories/Iusers.repository";
 
 import { User } from "../entities/User";
 
@@ -29,5 +30,9 @@ export class UsersRepository implements IUsersRepository {
     });
 
     await this.repository.save(user);
+  }
+
+  async findByLogin(login: string): Promise<User | undefined> {
+    return await this.repository.findOne({ login });
   }
 }
