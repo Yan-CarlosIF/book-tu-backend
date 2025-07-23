@@ -1,11 +1,12 @@
-import type { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
+
 import { AppError } from "./app-error.ts";
 
 export async function errorHandler(
   error: Error,
   request: Request,
   response: Response,
-  next: NextFunction
+  _next: NextFunction
 ) {
   if (error instanceof AppError) {
     return response.status(error.statusCode).json({

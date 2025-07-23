@@ -1,6 +1,7 @@
 import { IUsersRepository } from "domain/Users/repositories/Iusers.repository";
-import { User } from "../entities/User";
 import { getRepository, Repository } from "typeorm";
+
+import { User } from "../entities/User";
 
 export class UsersRepository implements IUsersRepository {
   private repository: Repository<User>;
