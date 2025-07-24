@@ -68,4 +68,8 @@ export class UsersRepository implements IUsersRepository {
       permission: (permission as Permission) ?? user.permission,
     });
   }
+
+  async delete(user: User): Promise<void> {
+    await this.repository.delete(user.id);
+  }
 }
