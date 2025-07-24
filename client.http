@@ -6,6 +6,11 @@ GET {{baseUrl}}/health
 
 ###
 
+# @name me
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{authToken}}
+###
+
 # @name createUser
 POST {{baseUrl}}/users
 Content-Type: application/json
