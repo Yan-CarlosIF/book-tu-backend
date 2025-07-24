@@ -9,6 +9,7 @@ GET {{baseUrl}}/health
 # @name createUser
 POST {{baseUrl}}/users
 Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 {
     "login": "yan-teste",
