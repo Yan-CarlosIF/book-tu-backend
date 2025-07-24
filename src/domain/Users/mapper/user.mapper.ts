@@ -1,6 +1,6 @@
 import { User } from "../infra/typeorm/entities/User";
 
-type UserView = Omit<User, "password">;
+export type UserView = Omit<User, "password">;
 
 export class UserMapper {
   static toViewUser({
