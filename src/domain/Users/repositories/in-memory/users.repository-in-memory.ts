@@ -26,4 +26,10 @@ export class UsersRepositoryInMemory implements IUsersRepository {
 
     return user;
   }
+
+  async findByRegistration(registration: string): Promise<User | undefined> {
+    const user = this.users.find((user) => user.registration === registration);
+
+    return user;
+  }
 }

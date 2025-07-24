@@ -4,4 +4,5 @@ import { User } from "../infra/typeorm/entities/User";
 export interface IUsersRepository {
   create(user: ICreateUserDTO): Promise<void>;
   findByLogin(login: string): Promise<User | undefined>;
+  findByRegistration(registration: string): Promise<User | undefined>;
 }
