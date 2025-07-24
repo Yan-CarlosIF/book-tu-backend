@@ -1,3 +1,4 @@
+import { hash } from "bcryptjs";
 import { getRepository, Repository } from "typeorm";
 
 import { ICreateUserDTO } from "@/domain/Users/dto/Icreate-user.dto";
@@ -20,10 +21,12 @@ export class UsersRepository implements IUsersRepository {
     registration,
     role,
   }: ICreateUserDTO): Promise<void> {
+    const hashedPassword = await hash(password, 8);
+
     const user = this.repository.create({
       login,
       name,
-      password,
+      password: hashedPassword,
       permission,
       registration,
       role,
@@ -34,5 +37,9 @@ export class UsersRepository implements IUsersRepository {
 
   async findByLogin(login: string): Promise<User | undefined> {
     return await this.repository.findOne({ login });
+  }
+
+  async findByRegistration(registration: string): Promise<User | undefined> {
+    return await this.repository.findOne({ registration });
   }
 }

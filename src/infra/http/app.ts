@@ -6,9 +6,12 @@ import cors from "cors";
 import express from "express";
 
 import { errorHandler } from "@/infra/errors/error-handler.ts";
+import connectWithDatabase from "@/infra/typeorm";
 
 import rateLimiter from "./middlewares/redis-rate-limiter.middleware.ts";
 import { router } from "./routes/_index.ts";
+
+connectWithDatabase();
 
 export const app = express();
 app.use(cors());

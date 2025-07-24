@@ -1,0 +1,31 @@
+@baseUrl=http://localhost:3333
+@authToken={{session.response.body.token}}
+
+# @name healthCheck
+GET {{baseUrl}}/health
+
+###
+
+# @name createUser
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+    "login": "yan-teste",
+    "name": "Yan Carlos Oliveira",
+    "password": "123",
+    "permission": "admin",
+    "registration": "40028922",
+    "role": "dev"
+}
+
+###
+
+# @name session
+POST {{baseUrl}}/auth/session
+Content-Type: application/json
+
+{
+    "login": "yan-teste",
+    "password": "123"
+}

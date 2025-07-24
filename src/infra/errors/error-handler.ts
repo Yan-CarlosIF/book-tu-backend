@@ -4,7 +4,7 @@ import { AppError } from "./app-error.ts";
 
 export async function errorHandler(
   error: Error,
-  request: Request,
+  _request: Request,
   response: Response,
   _next: NextFunction
 ) {
@@ -14,6 +14,7 @@ export async function errorHandler(
     });
   }
 
+  console.error(error);
   return response.status(500).json({
     message: "Internal Server Error",
   });

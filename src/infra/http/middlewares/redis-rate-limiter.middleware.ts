@@ -29,7 +29,11 @@ export default async function rateLimiter(
     await limiter.consume(request.ip);
 
     return next();
-  } catch {
-    throw new AppError("Too many requests", 429);
+  } catch (err) {
+    if (err instanceof Error && err.name === "RateLimiterRes") {
+      throw new AppError("Too many requests", 429);
+    }
+
+    throw new AppError("Internal Server Error", 500);
   }
 }
