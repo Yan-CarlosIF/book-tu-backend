@@ -38,4 +38,8 @@ export class UsersRepositoryInMemory implements IUsersRepository {
 
     return user;
   }
+
+  async list(): Promise<User[]> {
+    return this.users;
+  }
 }

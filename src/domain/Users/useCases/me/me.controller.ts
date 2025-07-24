@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { userMapper } from "../../mapper/user.mapper";
+import { UserMapper } from "../../mapper/user.mapper";
 import { MeUseCase } from "./me.useCase";
 
 export class MeController {
@@ -12,6 +12,6 @@ export class MeController {
 
     const user = await meUseCase.execute(id);
 
-    return response.status(200).json(userMapper.toMe(user));
+    return response.status(200).json(UserMapper.toViewUser(user));
   }
 }

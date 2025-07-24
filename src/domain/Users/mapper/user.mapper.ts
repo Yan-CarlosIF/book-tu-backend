@@ -1,7 +1,16 @@
 import { User } from "../infra/typeorm/entities/User";
 
-export class userMapper {
-  static toMe({ id, login, name, permission, registration, role }: User) {
+type UserView = Omit<User, "password">;
+
+export class UserMapper {
+  static toViewUser({
+    id,
+    login,
+    name,
+    permission,
+    registration,
+    role,
+  }: User): UserView {
     return {
       id,
       name,

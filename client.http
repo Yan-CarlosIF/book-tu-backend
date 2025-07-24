@@ -1,5 +1,7 @@
 @baseUrl=http://localhost:3333
-@authToken={{session.response.body.token}}
+
+# troque para sessionOperator se quiser testar como usuário operador
+@authToken={{sessionAdmin.response.body.token}}
 
 # @name healthCheck
 GET {{baseUrl}}/health
@@ -9,6 +11,13 @@ GET {{baseUrl}}/health
 # @name me
 GET {{baseUrl}}/users/me
 Authorization: Bearer {{authToken}}
+
+###
+
+# @name listUsers
+GET {{baseUrl}}/users
+Authorization: Bearer {{authToken}}
+
 ###
 
 # @name createUser
@@ -27,11 +36,22 @@ Authorization: Bearer {{authToken}}
 
 ###
 
-# @name session
+# @name sessionOperator
 POST {{baseUrl}}/auth/session
 Content-Type: application/json
 
 {
     "login": "yan-teste",
+    "password": "123"
+}
+
+###
+
+# @name sessionAdmin
+POST {{baseUrl}}/auth/session
+Content-Type: application/json
+
+{
+    "login": "admin-teste",
     "password": "123"
 }

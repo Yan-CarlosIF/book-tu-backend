@@ -50,4 +50,8 @@ export class UsersRepository implements IUsersRepository {
       },
     });
   }
+
+  async list(): Promise<User[]> {
+    return await this.repository.find();
+  }
 }

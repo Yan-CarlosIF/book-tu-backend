@@ -1,7 +1,7 @@
 import { AppError } from "@/infra/errors/app-error";
 
 import { Permission } from "../../infra/typeorm/entities/User";
-import { userMapper } from "../../mapper/user.mapper";
+import { UserMapper } from "../../mapper/user.mapper";
 import { UsersRepositoryInMemory } from "../../repositories/in-memory/users.repository-in-memory";
 import { MeUseCase } from "./me.useCase";
 
@@ -28,7 +28,7 @@ describe("[GET] /users/me", () => {
 
     const response = await meUseCase.execute(user!.id);
 
-    expect(response).toMatchObject(userMapper.toMe(user!));
+    expect(response).toMatchObject(UserMapper.toViewUser(user!));
   });
 
   it("should not be able to get the authenticated user if not authenticated", async () => {
