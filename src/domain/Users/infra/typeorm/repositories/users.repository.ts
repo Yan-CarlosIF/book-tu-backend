@@ -42,4 +42,12 @@ export class UsersRepository implements IUsersRepository {
   async findByRegistration(registration: string): Promise<User | undefined> {
     return await this.repository.findOne({ registration });
   }
+
+  async findById(id: string): Promise<User | undefined> {
+    return await this.repository.findOne({
+      where: {
+        id,
+      },
+    });
+  }
 }

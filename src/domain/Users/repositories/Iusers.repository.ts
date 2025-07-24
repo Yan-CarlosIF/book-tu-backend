@@ -5,4 +5,5 @@ export interface IUsersRepository {
   create(user: ICreateUserDTO): Promise<void>;
   findByLogin(login: string): Promise<User | undefined>;
   findByRegistration(registration: string): Promise<User | undefined>;
+  findById(id: string): Promise<User | undefined>;
 }

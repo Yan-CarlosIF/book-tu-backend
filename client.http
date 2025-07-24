@@ -12,8 +12,8 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "login": "yan-teste",
-    "name": "Yan Carlos Oliveira",
+    "login": "admin-teste",
+    "name": "Administrator",
     "password": "123",
     "permission": "admin",
     "registration": "40028922",

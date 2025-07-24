@@ -10,7 +10,7 @@ interface ITokenPayload {
 
 export async function authMiddleware(
   request: Request,
-  response: Response,
+  _response: Response,
   next: NextFunction
 ) {
   const { authorization } = request.headers;
