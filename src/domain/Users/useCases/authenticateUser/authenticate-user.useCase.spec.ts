@@ -40,7 +40,7 @@ describe("[POST] /auth/session", () => {
     });
   });
 
-  it("should not be able to authenticate a nonexistent user", async () => {
+  it("should not be able to authenticate a non-existent user", async () => {
     await expect(
       authenticateUserUseCase.execute({
         login: "user-test",

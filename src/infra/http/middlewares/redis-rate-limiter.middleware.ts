@@ -6,13 +6,13 @@ import { env } from "@/config/env.ts";
 import { AppError } from "@/infra/errors/app-error";
 
 const redisClient = redis.createClient({
-  url: env.REDIS_URL,
+  url: env.NODE_ENV === "test" ? env.REDIS_TEST_URL : env.REDIS_URL,
 });
 
 const limiter = new RateLimiterRedis({
   storeClient: redisClient,
   keyPrefix: "rateLimiter",
-  points: 10,
+  points: 50,
   duration: 2,
 });
 

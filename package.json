@@ -5,9 +5,9 @@
   "main": "server.ts",
   "scripts": {
     "dev": "tsx watch src/infra/http/server.ts",
-    "typeorm": "tsx node_modules/typeorm/cli.js",
+    "typeorm": "tsx NODE_ENV=test node_modules/typeorm/cli.js",
     "lint": "eslint . --ext .ts",
-    "test": "jest"
+    "test": "NODE_ENV=test jest --detectOpenHandles --runInBand"
   },
   "keywords": [],
   "author": "",
@@ -34,13 +34,15 @@
     "@eslint/js": "^9.31.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^4.17.23",
-    "@types/jsonwebtoken": "^9.0.10",
     "@types/jest": "^30.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/redis": "^2.8.32",
+    "@types/supertest": "^6.0.3",
     "eslint": "^9.31.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^16.3.0",
     "jest": "^30.0.5",
+    "supertest": "^7.1.4",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
