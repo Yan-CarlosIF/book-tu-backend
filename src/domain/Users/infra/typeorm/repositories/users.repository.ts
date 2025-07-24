@@ -2,9 +2,10 @@ import { hash } from "bcryptjs";
 import { getRepository, Repository } from "typeorm";
 
 import { ICreateUserDTO } from "@/domain/Users/dto/Icreate-user.dto";
+import { IUpdateUserDTO } from "@/domain/Users/dto/Iupdate-user.dto";
 import { IUsersRepository } from "@/domain/Users/repositories/Iusers.repository";
 
-import { User } from "../entities/User";
+import { Permission, User } from "../entities/User";
 
 export class UsersRepository implements IUsersRepository {
   private repository: Repository<User>;
@@ -53,5 +54,18 @@ export class UsersRepository implements IUsersRepository {
 
   async list(): Promise<User[]> {
     return await this.repository.find();
+  }
+
+  async update(
+    user: User,
+    { login, name, permission, registration, role }: IUpdateUserDTO
+  ): Promise<void> {
+    await this.repository.update(user.id, {
+      login: login ?? user.login,
+      name: name ?? user.name,
+      registration: registration ?? user.registration,
+      role: role ?? user.role,
+      permission: (permission as Permission) ?? user.permission,
+    });
   }
 }

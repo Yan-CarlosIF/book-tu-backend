@@ -36,6 +36,18 @@ Authorization: Bearer {{authToken}}
 
 ###
 
+# @name updateUser
+PATCH {{baseUrl}}/users/:id
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "name": "yanzin",
+    "permission": "admin"
+}
+
+###
+
 # @name sessionOperator
 POST {{baseUrl}}/auth/session
 Content-Type: application/json

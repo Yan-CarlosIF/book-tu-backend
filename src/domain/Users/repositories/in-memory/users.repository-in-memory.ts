@@ -3,7 +3,8 @@ import { hash } from "bcryptjs";
 import { ICreateUserDTO } from "@/domain/Users/dto/Icreate-user.dto";
 import { IUsersRepository } from "@/domain/Users/repositories/Iusers.repository";
 
-import { User } from "../../infra/typeorm/entities/User";
+import { IUpdateUserDTO } from "../../dto/Iupdate-user.dto";
+import { Permission, User } from "../../infra/typeorm/entities/User";
 
 export class UsersRepositoryInMemory implements IUsersRepository {
   private users: User[] = [];
@@ -41,5 +42,16 @@ export class UsersRepositoryInMemory implements IUsersRepository {
 
   async list(): Promise<User[]> {
     return this.users;
+  }
+
+  async update(user: User, data: IUpdateUserDTO): Promise<void> {
+    const userIndex = this.users.findIndex((u) => u.id === user.id);
+
+    this.users[userIndex] = {
+      ...this.users[userIndex],
+      ...data,
+      permission:
+        data.permission === "admin" ? Permission.ADMIN : Permission.OPERATOR,
+    };
   }
 }
