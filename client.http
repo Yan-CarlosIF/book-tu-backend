@@ -1,7 +1,30 @@
 @baseUrl=http://localhost:3333
 
-# troque para sessionOperator se quiser testar como usuário operador
-@authToken={{sessionAdmin.response.body.token}}
+# sessionOperator se quiser testar como usuário operador
+# sessionAdmin se quiser testar como usuário admin
+@authToken={{sessionOperator.response.body.token}}
+
+# @name sessionOperator
+POST {{baseUrl}}/auth/session
+Content-Type: application/json
+
+{
+    "login": "yan-teste",
+    "password": "123"
+}
+
+###
+
+# @name sessionAdmin
+POST {{baseUrl}}/auth/session
+Content-Type: application/json
+
+{
+    "login": "admin-teste",
+    "password": "123"
+}
+
+###
 
 # @name healthCheck
 GET {{baseUrl}}/health
@@ -46,24 +69,28 @@ Authorization: Bearer {{authToken}}
     "permission": "admin"
 }
 
-###
+### 
 
-# @name sessionOperator
-POST {{baseUrl}}/auth/session
+# @name createCategory
+POST {{baseUrl}}/categories
 Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 {
-    "login": "yan-teste",
-    "password": "123"
+    "name": "Test Category"
 }
 
 ###
 
-# @name sessionAdmin
-POST {{baseUrl}}/auth/session
+# @name createBook
+POST {{baseUrl}}/books
 Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 {
-    "login": "admin-teste",
-    "password": "123"
+    "title": "Test Book",
+    "author": "Test Author",
+    "release_year": 2023,
+    "price": 99.99,
+    "categoryIds": []
 }
