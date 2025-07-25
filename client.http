@@ -94,3 +94,10 @@ Authorization: Bearer {{authToken}}
     "price": 99.99,
     "categoryIds": []
 }
+
+###
+
+# @name listBooks
+GET {{baseUrl}}/books
+Content-Type: application/json
+Authorization: Bearer {{authToken}}

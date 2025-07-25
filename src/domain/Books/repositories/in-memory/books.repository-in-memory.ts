@@ -2,7 +2,7 @@ import { ICreateBookDTO } from "../../dto/Icreate-book.dto";
 import { Book } from "../../infra/typeorm/entities/Book";
 import { IBooksRepository } from "../Ibooks.repository";
 
-export class BooksInMemoryRepository implements IBooksRepository {
+export class BooksRepositoryInMemory implements IBooksRepository {
   books: Book[] = [];
 
   async create(data: ICreateBookDTO): Promise<void> {
@@ -15,5 +15,9 @@ export class BooksInMemoryRepository implements IBooksRepository {
 
   async findBookById(id: string): Promise<Book | undefined> {
     return this.books.find((book) => book.id === id);
+  }
+
+  async list(): Promise<Book[]> {
+    return this.books;
   }
 }

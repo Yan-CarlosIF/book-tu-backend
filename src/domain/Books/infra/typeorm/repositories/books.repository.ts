@@ -21,4 +21,8 @@ export class BooksRepository implements IBooksRepository {
   async findBookById(id: string): Promise<Book | undefined> {
     return await this.repository.findOne({ where: { id } });
   }
+
+  async list(): Promise<Book[]> {
+    return await this.repository.find();
+  }
 }

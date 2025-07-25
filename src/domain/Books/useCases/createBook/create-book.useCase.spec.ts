@@ -2,17 +2,17 @@ import { v4 } from "uuid";
 
 import { AppError } from "@/infra/errors/app-error";
 
-import { BooksInMemoryRepository } from "../../repositories/in-memory/books.repository-in-memory";
+import { BooksRepositoryInMemory } from "../../repositories/in-memory/books.repository-in-memory";
 import { CategoriesRepositoryInMemory } from "../../repositories/in-memory/categories.repository-in-memory";
 import { CreateBookUseCase } from "./create-book.useCase";
 
 describe("[POST] /books", () => {
-  let booksRepository: BooksInMemoryRepository;
+  let booksRepository: BooksRepositoryInMemory;
   let categoriesRepository: CategoriesRepositoryInMemory;
   let createBookUseCase: CreateBookUseCase;
 
   beforeEach(() => {
-    booksRepository = new BooksInMemoryRepository();
+    booksRepository = new BooksRepositoryInMemory();
     categoriesRepository = new CategoriesRepositoryInMemory();
     createBookUseCase = new CreateBookUseCase(
       booksRepository,
