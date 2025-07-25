@@ -101,3 +101,18 @@ Authorization: Bearer {{authToken}}
 GET {{baseUrl}}/books
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
+
+###
+
+# @name updateBook
+PATCH {{baseUrl}}/books/2a205a2d-8db2-4acd-a62c-ab10a8a1347c
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "title": "Updated Title",
+    "author": "Updated Author",
+    "release_year": 2026,
+    "price": 1000,
+    "categoryIds": []
+}

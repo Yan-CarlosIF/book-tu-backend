@@ -1,6 +1,7 @@
 import { getRepository, Repository } from "typeorm";
 
 import { ICreateBookDTO } from "@/domain/Books/dto/Icreate-book.dto";
+import { IUpdateBookDTO } from "@/domain/Books/dto/Iupdate-book.dto";
 import { IBooksRepository } from "@/domain/Books/repositories/Ibooks.repository";
 
 import { Book } from "../entities/Book";
@@ -23,6 +24,12 @@ export class BooksRepository implements IBooksRepository {
   }
 
   async list(): Promise<Book[]> {
-    return await this.repository.find();
+    return await this.repository.find({ relations: ["categories"] });
+  }
+
+  async update(book: Book, data: IUpdateBookDTO): Promise<void> {
+    const bookIndex = this.repository.merge(book, data);
+
+    await this.repository.save(bookIndex);
   }
 }
