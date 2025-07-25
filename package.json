@@ -5,7 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "dev": "tsx watch src/infra/http/server.ts",
-    "typeorm": "tsx NODE_ENV=test node_modules/typeorm/cli.js",
+    "typeorm": "tsx node_modules/typeorm/cli.js",
     "lint": "eslint . --ext .ts",
     "test": "NODE_ENV=test jest --detectOpenHandles --runInBand"
   },
