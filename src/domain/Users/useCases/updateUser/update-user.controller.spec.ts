@@ -61,13 +61,13 @@ describe("[PATCH] /users/:id", () => {
         login: "user-test3",
       });
 
-    const { body: users } = await request(app)
+    const { body } = await request(app)
       .get("/users")
       .set({
         authorization: `Bearer ${token}`,
       });
 
-    expect(users[1].login).toBe("user-test3");
+    expect(body.users[1].login).toBe("user-test3");
     expect(response.status).toBe(204);
   });
 

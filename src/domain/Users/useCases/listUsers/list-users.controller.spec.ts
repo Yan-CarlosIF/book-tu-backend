@@ -46,7 +46,7 @@ describe("[GET] /users", () => {
       .set({ Authorization: `Bearer ${token}` });
 
     expect(response.status).toBe(200);
-    expect(response.body.length).toBe(2);
+    expect(response.body.total).toBe(2);
   });
 
   it("should not be able to list all users if not authenticated", async () => {

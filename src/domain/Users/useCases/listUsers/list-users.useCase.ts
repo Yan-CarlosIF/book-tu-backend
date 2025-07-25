@@ -43,7 +43,7 @@ export class ListUsersUseCase {
         break;
     }
 
-    if (!page) {
+    if (!page || page < 1) {
       page = 1;
     }
 

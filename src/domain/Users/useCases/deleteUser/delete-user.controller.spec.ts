@@ -60,12 +60,12 @@ describe("[DELETE] /users/:id", () => {
         authorization: `Bearer ${token}`,
       });
 
-    const { body: users } = await request(app)
+    const { body } = await request(app)
       .get("/users")
       .set({ Authorization: `Bearer ${token}` });
 
     expect(response.status).toBe(204);
-    expect(users.length).toBe(1);
+    expect(body.users.length).toBe(1);
   });
 
   it("should not be able to delete yourself", async () => {
