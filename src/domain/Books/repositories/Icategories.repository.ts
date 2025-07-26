@@ -4,5 +4,7 @@ export interface ICategoriesRepository {
   create(name: string): Promise<void>;
   findByName(name: string): Promise<Category | undefined>;
   findByIds(ids: string[]): Promise<Category[]>;
+  findById(id: string): Promise<Category | undefined>;
   list(): Promise<Category[]>;
+  update(category: Category, name: string): Promise<void>;
 }

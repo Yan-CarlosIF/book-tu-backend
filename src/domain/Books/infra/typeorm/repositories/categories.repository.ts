@@ -25,7 +25,17 @@ export class CategoriesRepository implements ICategoriesRepository {
     return await this.repository.findByIds(ids);
   }
 
+  async findById(id: string): Promise<Category | undefined> {
+    return await this.repository.findOne({ id });
+  }
+
   async list(): Promise<Category[]> {
     return await this.repository.find();
+  }
+
+  async update(category: Category, name: string): Promise<void> {
+    const categoryIndex = this.repository.merge(category, { name });
+
+    await this.repository.save(categoryIndex);
   }
 }

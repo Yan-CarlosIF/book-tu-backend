@@ -88,6 +88,17 @@ Authorization: Bearer {{authToken}}
 
 ###
 
+# @name updateCategory
+PATCH {{baseUrl}}/categories/:id
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "name": "Update Test Category"
+}
+
+###
+
 # @name createBook
 POST {{baseUrl}}/books
 Content-Type: application/json

@@ -20,7 +20,19 @@ export class CategoriesRepositoryInMemory implements ICategoriesRepository {
     return this.categories.filter((category) => ids.includes(category.id));
   }
 
+  async findById(id: string): Promise<Category | undefined> {
+    return this.categories.find((category) => category.id === id);
+  }
+
   async list(): Promise<Category[]> {
     return this.categories;
+  }
+
+  async update(category: Category, name: string): Promise<void> {
+    const categoryIndex = this.categories.findIndex(
+      (c) => c.id === category.id
+    );
+
+    this.categories[categoryIndex].name = name;
   }
 }
