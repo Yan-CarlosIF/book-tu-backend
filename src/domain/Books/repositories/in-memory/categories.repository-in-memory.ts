@@ -35,4 +35,12 @@ export class CategoriesRepositoryInMemory implements ICategoriesRepository {
 
     this.categories[categoryIndex].name = name;
   }
+
+  async delete(category: Category): Promise<void> {
+    const categoryIndex = this.categories.findIndex(
+      (c) => c.id === category.id
+    );
+
+    this.categories.splice(categoryIndex, 1);
+  }
 }

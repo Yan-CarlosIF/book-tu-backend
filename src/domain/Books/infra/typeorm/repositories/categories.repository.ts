@@ -38,4 +38,8 @@ export class CategoriesRepository implements ICategoriesRepository {
 
     await this.repository.save(categoryIndex);
   }
+
+  async delete(category: Category): Promise<void> {
+    await this.repository.delete(category.id);
+  }
 }
