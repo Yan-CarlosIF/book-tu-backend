@@ -32,4 +32,8 @@ export class BooksRepository implements IBooksRepository {
 
     await this.repository.save(bookIndex);
   }
+
+  async delete(Book: Book): Promise<void> {
+    await this.repository.delete(Book.id);
+  }
 }

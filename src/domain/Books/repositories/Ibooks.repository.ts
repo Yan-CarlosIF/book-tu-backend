@@ -7,4 +7,5 @@ export interface IBooksRepository {
   findBookById(id: string): Promise<Book | undefined>;
   list(): Promise<Book[]>;
   update(Book: Book, data: IUpdateBookDTO): Promise<void>;
+  delete(Book: Book): Promise<void>;
 }

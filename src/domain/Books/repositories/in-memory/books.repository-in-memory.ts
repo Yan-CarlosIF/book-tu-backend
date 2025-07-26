@@ -30,4 +30,10 @@ export class BooksRepositoryInMemory implements IBooksRepository {
       ...data,
     };
   }
+
+  async delete(Book: Book): Promise<void> {
+    const bookIndex = this.books.findIndex((b) => b.id === Book.id);
+
+    this.books.splice(bookIndex, 1);
+  }
 }
