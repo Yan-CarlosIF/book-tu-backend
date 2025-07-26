@@ -90,7 +90,7 @@ describe("[PATCH] /books/:id", () => {
     expect(response.status).toBe(204);
   });
 
-  it("should not be able to update a inexistent book", async () => {
+  it("should not be able to update a book if the book does not exist", async () => {
     const responseAuth = await request(app).post("/auth/session").send({
       login: "user-test",
       password: "123",
@@ -113,6 +113,42 @@ describe("[PATCH] /books/:id", () => {
 
     expect(response.status).toBe(404);
     expect(response.body.message).toBe("Book not found");
+  });
+
+  it("should not be able to update a book if the category does not exist", async () => {
+    const responseAuth = await request(app).post("/auth/session").send({
+      login: "user-test",
+      password: "123",
+    });
+
+    const { token } = responseAuth.body;
+
+    const {
+      body: { books },
+    } = await request(app)
+      .get("/books")
+      .set({
+        Authorization: `Bearer ${token}`,
+      });
+
+    const { id } = books[0];
+
+    const response = await request(app)
+      .patch(`/books/${id}`)
+      .set({
+        Authorization: `Bearer ${token}`,
+      })
+      .send({
+        title: "Book 2",
+        author: "Author 2",
+        release_year: 2001,
+        price: 20,
+        description: "Description 2",
+        categoryIds: [v4()],
+      });
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("One or more categories not found");
   });
 
   it("should not be able to update a book if not authenticated", async () => {
