@@ -19,4 +19,8 @@ export class CategoriesRepositoryInMemory implements ICategoriesRepository {
   async findByIds(ids: string[]): Promise<Category[]> {
     return this.categories.filter((category) => ids.includes(category.id));
   }
+
+  async list(): Promise<Category[]> {
+    return this.categories;
+  }
 }

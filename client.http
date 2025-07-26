@@ -82,6 +82,12 @@ Authorization: Bearer {{authToken}}
 
 ###
 
+# @name listCategories
+GET {{baseUrl}}/categories
+Authorization: Bearer {{authToken}}
+
+###
+
 # @name createBook
 POST {{baseUrl}}/books
 Content-Type: application/json
