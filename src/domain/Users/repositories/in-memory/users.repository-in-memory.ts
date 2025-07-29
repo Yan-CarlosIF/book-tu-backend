@@ -4,6 +4,7 @@ import { ICreateUserDTO } from "@/domain/Users/dto/Icreate-user.dto";
 import { IUsersRepository } from "@/domain/Users/repositories/Iusers.repository";
 
 import { IUpdateUserDTO } from "../../dto/Iupdate-user.dto";
+import { IUsersPaginationData } from "../../dto/Iusers-pagination-data.dto";
 import { Permission, User } from "../../infra/typeorm/entities/User";
 
 export class UsersRepositoryInMemory implements IUsersRepository {
@@ -40,8 +41,36 @@ export class UsersRepositoryInMemory implements IUsersRepository {
     return user;
   }
 
-  async list(): Promise<User[]> {
-    return this.users;
+  async list(page: number, sort?: string): Promise<IUsersPaginationData> {
+    let users = this.users;
+
+    switch (sort) {
+      case "asc":
+        users = this.users.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "desc":
+        users = this.users.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case "operator":
+        users = this.users.filter((u) => u.permission === Permission.OPERATOR);
+        break;
+      case "admin":
+        users = this.users.filter((u) => u.permission === Permission.ADMIN);
+        break;
+    }
+
+    const lastPage = Math.ceil(users.length / 10);
+
+    if (page > lastPage) {
+      page = lastPage;
+    }
+
+    return {
+      data: users.slice((page - 1) * 10, page * 10),
+      page,
+      total: users.length,
+      lastPage,
+    };
   }
 
   async update(user: User, data: IUpdateUserDTO): Promise<void> {

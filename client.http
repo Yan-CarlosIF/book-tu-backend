@@ -2,7 +2,7 @@
 
 # sessionOperator se quiser testar como usuário operador
 # sessionAdmin se quiser testar como usuário admin
-@authToken={{sessionOperator.response.body.token}}
+@authToken={{sessionAdmin.response.body.token}}
 
 # @name sessionOperator
 POST {{baseUrl}}/auth/session
@@ -20,7 +20,7 @@ POST {{baseUrl}}/auth/session
 Content-Type: application/json
 
 {
-    "login": "admin-teste",
+    "login": "admin-test",
     "password": "123"
 }
 
@@ -82,7 +82,7 @@ Authorization: Bearer {{authToken}}
 
 ###
 
-# @name listCategories
+# @name listCategoriesWithPagination
 GET {{baseUrl}}/categories
 Authorization: Bearer {{authToken}}
 
@@ -114,7 +114,7 @@ Authorization: Bearer {{authToken}}
 
 ###
 
-# @name listBooks
+# @name listBooksWithPagination
 GET {{baseUrl}}/books
 Content-Type: application/json
 Authorization: Bearer {{authToken}}

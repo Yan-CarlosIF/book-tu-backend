@@ -30,7 +30,7 @@ describe("[GET] /users", () => {
       role: "user",
     });
 
-    const { data: users, total } = await listUsersUseCase.execute();
+    const { users, total } = await listUsersUseCase.execute();
 
     expect(total).toBe(2);
     expect(users[0]).toHaveProperty("id");
@@ -51,7 +51,7 @@ describe("[GET] /users", () => {
       });
     }
 
-    const { data: users, total } = await listUsersUseCase.execute(undefined, 1);
+    const { users, total } = await listUsersUseCase.execute(undefined, 1);
 
     expect(total).toBe(20);
     expect(users.length).toBe(10);
@@ -78,13 +78,13 @@ describe("[GET] /users", () => {
       role: "user",
     });
 
-    const { data: users, total } = await listUsersUseCase.execute("asc");
+    const { users, total } = await listUsersUseCase.execute("asc");
 
     expect(total).toBe(2);
     expect(users[0].name).toBe("Mairon");
     expect(users[1].name).toBe("Yan");
 
-    const { data: users2, total: total2 } = await listUsersUseCase.execute(
+    const { users: users2, total: total2 } = await listUsersUseCase.execute(
       "desc"
     );
 
@@ -92,7 +92,7 @@ describe("[GET] /users", () => {
     expect(users2[0].name).toBe("Yan");
     expect(users2[1].name).toBe("Mairon");
 
-    const { data: users3, total: total3 } = await listUsersUseCase.execute(
+    const { users: users3, total: total3 } = await listUsersUseCase.execute(
       "admin"
     );
 
@@ -100,7 +100,7 @@ describe("[GET] /users", () => {
     expect(users3[0].name).toBe("Mairon");
     expect(users3[0].permission).toBe(Permission.ADMIN);
 
-    const { data: users4, total: total4 } = await listUsersUseCase.execute(
+    const { users: users4, total: total4 } = await listUsersUseCase.execute(
       "operator"
     );
 

@@ -1,8 +1,10 @@
 import { getRepository, Repository } from "typeorm";
 
 import { ICreateBookDTO } from "@/domain/Books/dto/Icreate-book.dto";
+import { IPaginationData } from "@/domain/Books/dto/Ipagination-data.dto";
 import { IUpdateBookDTO } from "@/domain/Books/dto/Iupdate-book.dto";
 import { IBooksRepository } from "@/domain/Books/repositories/Ibooks.repository";
+import { pagination } from "@/utils/pagination";
 
 import { Book } from "../entities/Book";
 
@@ -35,5 +37,35 @@ export class BooksRepository implements IBooksRepository {
 
   async delete(Book: Book): Promise<void> {
     await this.repository.delete(Book.id);
+  }
+
+  async listWithPagination(
+    page: number,
+    sort?: string
+  ): Promise<IPaginationData> {
+    const queryBuilder = this.repository.createQueryBuilder("books");
+
+    switch (sort) {
+      case "asc":
+        queryBuilder.orderBy("books.title", "ASC");
+        break;
+      case "desc":
+        queryBuilder.orderBy("books.title", "DESC");
+        break;
+      case "oldest":
+        queryBuilder.orderBy("books.release_year", "ASC");
+        break;
+      case "latest":
+        queryBuilder.orderBy("books.release_year", "DESC");
+        break;
+      case "price-asc":
+        queryBuilder.orderBy("books.price", "ASC");
+        break;
+      case "price-desc":
+        queryBuilder.orderBy("books.price", "DESC");
+        break;
+    }
+
+    return await pagination<Book>(queryBuilder, page, 10);
   }
 }

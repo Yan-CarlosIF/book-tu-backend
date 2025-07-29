@@ -1,20 +1,22 @@
 import { CategoriesRepositoryInMemory } from "../../repositories/in-memory/categories.repository-in-memory";
-import { ListCategoriesUseCase } from "./list-categories.useCase";
+import { ListCategoriesWithPaginationUseCase } from "./list-categories-with-pagination.useCase";
 
 describe("[GET] /categories", () => {
   let categoriesRepository: CategoriesRepositoryInMemory;
-  let listCategoriesUseCase: ListCategoriesUseCase;
+  let listCategoriesUseCase: ListCategoriesWithPaginationUseCase;
 
   beforeEach(() => {
     categoriesRepository = new CategoriesRepositoryInMemory();
-    listCategoriesUseCase = new ListCategoriesUseCase(categoriesRepository);
+    listCategoriesUseCase = new ListCategoriesWithPaginationUseCase(
+      categoriesRepository
+    );
   });
 
   it("should be able to list all categories", async () => {
     await categoriesRepository.create("Category 1");
     await categoriesRepository.create("Category 2");
 
-    const { data: categories } = await listCategoriesUseCase.execute();
+    const { categories } = await listCategoriesUseCase.execute();
 
     expect(categories.length).toBe(2);
     expect(categories[0]).toHaveProperty("id");

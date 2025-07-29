@@ -6,7 +6,7 @@ import { v4 } from "uuid";
 import { app } from "@/infra/http/app";
 import createConnection from "@/infra/typeorm";
 
-describe("[GET] /books/all", () => {
+describe("[GET] /books", () => {
   let connection: Connection;
   let token: string;
 
@@ -30,10 +30,12 @@ describe("[GET] /books/all", () => {
 
     token = responseAuth.body.token;
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 20; i++) {
       await request(app)
         .post("/books")
-        .set({ Authorization: `Bearer ${token}` })
+        .set({
+          Authorization: `Bearer ${token}`,
+        })
         .send({
           title: `Random book ${i + 1}`,
           author: `Random author ${i + 1}`,
@@ -52,19 +54,34 @@ describe("[GET] /books/all", () => {
   });
 
   it("should be able to list all books", async () => {
-    const response = await request(app)
-      .get("/books/all")
+    const {
+      body: { total },
+    } = await request(app)
+      .get("/books")
       .set({
         Authorization: `Bearer ${token}`,
       });
 
-    expect(response.status).toBe(200);
-    expect(response.body.length).toBe(10);
+    expect(total).toBe(20);
   });
 
-  it("should not be able to list all books without authentication", async () => {
-    const response = await request(app).get("/books/all");
+  it("should be able to list all books with pagination", async () => {
+    const responseAuth = await request(app).post("/auth/session").send({
+      login: "user-test",
+      password: "123",
+    });
 
-    expect(response.body.message).toEqual("Token not found");
+    const { token } = responseAuth.body;
+
+    const { body } = await request(app)
+      .get("/books")
+      .set({
+        Authorization: `Bearer ${token}`,
+      })
+      .query({ page: 2 });
+
+    expect(body.books.length).toBe(10);
+    expect(body.total).toBe(20);
+    expect(body.page).toBe(2);
   });
 });

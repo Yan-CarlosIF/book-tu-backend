@@ -3,7 +3,9 @@ import { getRepository, Repository } from "typeorm";
 
 import { ICreateUserDTO } from "@/domain/Users/dto/Icreate-user.dto";
 import { IUpdateUserDTO } from "@/domain/Users/dto/Iupdate-user.dto";
+import { IUsersPaginationData } from "@/domain/Users/dto/Iusers-pagination-data.dto";
 import { IUsersRepository } from "@/domain/Users/repositories/Iusers.repository";
+import { pagination } from "@/utils/pagination";
 
 import { Permission, User } from "../entities/User";
 
@@ -52,8 +54,25 @@ export class UsersRepository implements IUsersRepository {
     });
   }
 
-  async list(): Promise<User[]> {
-    return await this.repository.find();
+  async list(page: number, sort?: string): Promise<IUsersPaginationData> {
+    const queryBuilder = this.repository.createQueryBuilder("users");
+
+    switch (sort) {
+      case "asc":
+        queryBuilder.orderBy("users.name", "ASC");
+        break;
+      case "desc":
+        queryBuilder.orderBy("users.name", "DESC");
+        break;
+      case "operator":
+        queryBuilder.where("users.permission = 'operator'");
+        break;
+      case "admin":
+        queryBuilder.where("users.permission = 'admin'");
+        break;
+    }
+
+    return await pagination<User>(queryBuilder, page, 10);
   }
 
   async update(

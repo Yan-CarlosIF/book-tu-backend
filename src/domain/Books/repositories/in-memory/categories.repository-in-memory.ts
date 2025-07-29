@@ -1,3 +1,4 @@
+import { IPaginationData } from "../../dto/Ipagination-data.dto";
 import { Category } from "../../infra/typeorm/entities/Category";
 import { ICategoriesRepository } from "../Icategories.repository";
 
@@ -42,5 +43,38 @@ export class CategoriesRepositoryInMemory implements ICategoriesRepository {
     );
 
     this.categories.splice(categoryIndex, 1);
+  }
+
+  async listWithPagination(
+    page: number,
+    sort?: string
+  ): Promise<IPaginationData> {
+    const lastPage = Math.ceil(this.categories.length / 10);
+
+    if (page > lastPage) {
+      page = lastPage;
+    }
+
+    let categories = this.categories;
+
+    switch (sort) {
+      case "asc":
+        categories = this.categories.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+        break;
+      case "desc":
+        categories = this.categories.sort((a, b) =>
+          b.name.localeCompare(a.name)
+        );
+        break;
+    }
+
+    return {
+      data: categories.slice((page - 1) * 10, page * 10),
+      page,
+      lastPage: lastPage,
+      total: this.categories.length,
+    };
   }
 }

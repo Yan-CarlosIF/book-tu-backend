@@ -22,18 +22,8 @@ export class ListUsersController {
 
     const listUsersUseCase = container.resolve(ListUsersUseCase);
 
-    const {
-      lastPage,
-      page: currentPage,
-      total,
-      data: users,
-    } = await listUsersUseCase.execute(sort, page);
+    const paginatedUsers = await listUsersUseCase.execute(sort, page);
 
-    return response.status(200).send({
-      users,
-      total,
-      page: currentPage,
-      lastPage,
-    });
+    return response.status(200).send(paginatedUsers);
   }
 }
