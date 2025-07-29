@@ -88,6 +88,12 @@ Authorization: Bearer {{authToken}}
 
 ###
 
+# @name listAllCategories
+GET {{baseUrl}}/categories/all
+Authorization: Bearer {{authToken}}
+
+###
+
 # @name updateCategory
 PATCH {{baseUrl}}/categories/:id
 Content-Type: application/json
