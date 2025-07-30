@@ -22,7 +22,10 @@ export class BooksRepository implements IBooksRepository {
   }
 
   async findBookById(id: string): Promise<Book | undefined> {
-    return await this.repository.findOne({ where: { id } });
+    return await this.repository.findOne({
+      where: { id },
+      relations: ["categories"],
+    });
   }
 
   async list(): Promise<Book[]> {
@@ -46,7 +49,7 @@ export class BooksRepository implements IBooksRepository {
     const queryBuilder = this.repository.createQueryBuilder("books");
 
     queryBuilder.leftJoinAndSelect("books.categories", "categories");
-    
+
     switch (sort) {
       case "asc":
         queryBuilder.orderBy("books.title", "ASC");

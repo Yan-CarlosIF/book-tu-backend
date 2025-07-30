@@ -105,6 +105,12 @@ Authorization: Bearer {{authToken}}
 
 ###
 
+# @name getBook
+GET {{baseUrl}}/books/288a67d3-294d-4edc-97f2-76aa0859974e
+Authorization: Bearer {{authToken}}
+
+###
+
 # @name createBook
 POST {{baseUrl}}/books
 Content-Type: application/json
