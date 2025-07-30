@@ -1,68 +1,340 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Book TU API",
-    "version": "1.0.0",
-    "description": "API para sistema de gestão de livros"
+    "title": "Book-TU Backend API",
+    "description": "API para um sistema de gestão de livros",
+    "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://localhost:3333",
-      "description": "Servidor local"
+      "url": "http://localhost:3333"
     }
   ],
   "paths": {
-    "/users": {
-      "get": {
-        "tags": ["Users"],
-        "summary": "Lista todos os usuários",
-        "description": "Lista todos os usuários cadastrados",
-        "security": [
-          {
-            "bearerAuth": []
+    "/auth/session": {
+      "post": {
+        "summary": "Autenticação de usuário",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["login", "password"],
+                "properties": {
+                  "login": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
           }
-        ],
+        },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "Autenticado com sucesso",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "users": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/definitions/User"
-                      }
-                    },
-                    "total": {
-                      "type": "number",
-                      "example": 10
-                    },
-                    "page": {
-                      "type": "number",
-                      "example": 2
-                    },
-                    "lastPage": {
-                      "type": "number",
-                      "example": 5
-                    }
+                    "token": { "type": "string" }
                   }
                 }
               }
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "Senha incorreta",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "Incorrect password" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "User not found" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Lista usuários",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc", "operator", "admin"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "users": { "type": "array", "items": { "type": "object" } },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "lastPage": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string",
-                      "example": "Token not found"
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cria um novo usuário",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "login",
+                  "name",
+                  "password",
+                  "permission",
+                  "registration",
+                  "role"
+                ],
+                "properties": {
+                  "login": { "type": "string" },
+                  "name": { "type": "string" },
+                  "password": { "type": "string" },
+                  "permission": { "type": "string" },
+                  "registration": { "type": "string" },
+                  "role": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Usuário criado" },
+          "400": { "description": "Erro de validação" },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Usuário já existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "User already exists" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "patch": {
+        "summary": "Atualiza dados do usuário",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "login": { "type": "string" },
+                  "name": { "type": "string" },
+                  "password": { "type": "string" },
+                  "permission": { "type": "string" },
+                  "registration": { "type": "string" },
+                  "role": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": { "description": "Usuário atualizado" },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove um usuário",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Usuário removido" },
+          "400": {
+            "description": "Não pode remover a si mesmo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "You cannot delete yourself" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sem permissão",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "User does not have permission" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "summary": "Dados do usuário autenticado",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Dados do usuário",
+            "content": {
+              "application/json": { "schema": { "type": "object" } }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
                     }
                   }
                 }
@@ -71,29 +343,466 @@
           }
         }
       }
-    }
-  },
-  "definitions": {
-    "User": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
+    },
+    "/books": {
+      "get": {
+        "summary": "Lista livros",
+        "tags": ["Books"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de livros",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "books": {
+                      "type": "array",
+                      "items": { "type": "object" }
+                    },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "lastPage": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cria um novo livro",
+        "tags": ["Books"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "author",
+                  "release_year",
+                  "price",
+                  "categoryIds"
+                ],
+                "properties": {
+                  "title": { "type": "string" },
+                  "author": { "type": "string" },
+                  "release_year": { "type": "integer" },
+                  "price": { "type": "number" },
+                  "description": { "type": "string" },
+                  "categoryIds": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
         },
-        "name": {
-          "type": "string"
+        "responses": {
+          "201": { "description": "Livro criado" },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/books/all": {
+      "get": {
+        "summary": "Lista todos os livros",
+        "tags": ["Books"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de livros",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "type": "object" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/books/{id}": {
+      "patch": {
+        "summary": "Atualiza um livro",
+        "tags": ["Books"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "author": { "type": "string" },
+                  "release_year": { "type": "integer" },
+                  "price": { "type": "number" },
+                  "description": { "type": "string" },
+                  "categoryIds": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
         },
-        "registration": {
-          "type": "string"
+        "responses": {
+          "204": { "description": "Livro atualizado" },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove um livro",
+        "tags": ["Books"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Livro removido" },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sem permissão",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "User does not have permission" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "summary": "Lista categorias",
+        "tags": ["Categories"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de categorias",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "categories": {
+                      "type": "array",
+                      "items": { "type": "object" }
+                    },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "lastPage": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cria uma nova categoria",
+        "tags": ["Categories"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": { "type": "string" }
+                }
+              }
+            }
+          }
         },
-        "login": {
-          "type": "string"
+        "responses": {
+          "201": { "description": "Categoria criada" },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/all": {
+      "get": {
+        "summary": "Lista todas as categorias",
+        "tags": ["Categories"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de categorias",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "type": "object" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "patch": {
+        "summary": "Atualiza uma categoria",
+        "tags": ["Categories"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" }
+                }
+              }
+            }
+          }
         },
-        "role": {
-          "type": "string"
-        },
-        "permission": {
-          "type": "string"
+        "responses": {
+          "204": { "description": "Categoria atualizada" },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove uma categoria",
+        "tags": ["Categories"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Categoria removida" },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token not found" },
+                        { "example": "Invalid token" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sem permissão",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "User does not have permission" }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
