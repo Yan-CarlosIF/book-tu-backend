@@ -45,6 +45,8 @@ export class BooksRepository implements IBooksRepository {
   ): Promise<IPaginationData> {
     const queryBuilder = this.repository.createQueryBuilder("books");
 
+    queryBuilder.leftJoinAndSelect("books.categories", "categories");
+    
     switch (sort) {
       case "asc":
         queryBuilder.orderBy("books.title", "ASC");
