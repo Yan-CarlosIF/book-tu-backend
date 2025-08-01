@@ -5,7 +5,7 @@ import { z } from "zod";
 import { GetBookUseCase } from "./get-book.useCase";
 
 const getBookParamsSchema = z.object({
-  id: z.uuidv4(),
+  id: z.string().uuid(),
 });
 
 type IParams = z.infer<typeof getBookParamsSchema>;

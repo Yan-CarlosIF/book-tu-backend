@@ -33,9 +33,15 @@ export class BooksRepository implements IBooksRepository {
   }
 
   async update(book: Book, data: IUpdateBookDTO): Promise<void> {
-    const bookIndex = this.repository.merge(book, data);
+    const { categories, ...rest } = data;
 
-    await this.repository.save(bookIndex);
+    this.repository.merge(book, rest);
+
+    if (categories !== undefined) {
+      book.categories = categories.length > 0 ? categories : [];
+    }
+
+    await this.repository.save(book);
   }
 
   async delete(Book: Book): Promise<void> {

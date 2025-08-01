@@ -5,7 +5,7 @@ import z from "zod";
 import { DeleteCategoryUseCase } from "./delete-category.useCase";
 
 const paramsSchema = z.object({
-  id: z.uuidv4(),
+  id: z.string().uuid(),
 });
 
 type IParams = z.infer<typeof paramsSchema>;

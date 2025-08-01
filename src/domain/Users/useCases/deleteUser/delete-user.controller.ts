@@ -7,7 +7,7 @@ import { AppError } from "@/infra/errors/app-error";
 import { DeleteUserUseCase } from "./delete-user.useCase";
 
 const deleteUserParamsSchema = z.object({
-  id: z.uuidv4(),
+  id: z.string().uuid(),
 });
 
 export class DeleteUserController {

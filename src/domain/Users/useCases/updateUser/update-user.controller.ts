@@ -6,7 +6,7 @@ import { IUpdateUserDTO } from "../../dto/Iupdate-user.dto";
 import { UpdateUserUseCase } from "./update-user.useCase";
 
 const updateUserParamsSchema = z.object({
-  id: z.uuidv4(),
+  id: z.string().uuid(),
 });
 
 const updateUserBodySchema = z.object({

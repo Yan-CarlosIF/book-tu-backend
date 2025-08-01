@@ -5,7 +5,7 @@ import { z } from "zod";
 import { UpdateBookUseCase } from "./update-book.useCase";
 
 const updateBookParamsSchema = z.object({
-  id: z.uuidv4(),
+  id: z.string().uuid(),
 });
 
 const updateBookBodySchema = z.object({
@@ -25,6 +25,7 @@ export class UpdateBookController {
     response: Response
   ) {
     const { id } = updateBookParamsSchema.parse(request.params);
+    
     const { author, categoryIds, description, price, release_year, title } =
       updateBookBodySchema.parse(request.body);
 

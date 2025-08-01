@@ -5,7 +5,7 @@ import z from "zod";
 import { UpdateCategoryUseCase } from "./update-category.useCase";
 
 const paramsSchema = z.object({
-  id: z.uuidv4(),
+  id: z.string().uuid(),
 });
 
 const updateCategoryBodySchema = z.object({
