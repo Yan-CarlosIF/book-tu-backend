@@ -1,24 +1,27 @@
 import type { Request, Response } from "express";
 import { container } from "tsyringe";
+import { z } from "zod";
 
 import { CreateBookUseCase } from "./create-book.useCase";
 
-export interface IRequest {
-  title: string;
-  author: string;
-  release_year: number;
-  price: number;
-  description?: string;
-  categoryIds: string[];
-}
+const createBookBodySchema = z.object({
+  title: z.string(),
+  author: z.string(),
+  release_year: z.number(),
+  price: z.number(),
+  description: z.string().optional(),
+  categoryIds: z.array(z.string()),
+});
+
+export type ICreateBookBody = z.infer<typeof createBookBodySchema>;
 
 export class CreateBookController {
   async handle(
-    request: Request<unknown, unknown, IRequest>,
+    request: Request<unknown, unknown, ICreateBookBody>,
     response: Response
   ) {
     const { title, author, release_year, price, description, categoryIds } =
-      request.body;
+      createBookBodySchema.parse(request.body);
 
     const createBookUseCase = container.resolve(CreateBookUseCase);
 

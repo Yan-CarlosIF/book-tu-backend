@@ -4,7 +4,7 @@ import { AppError } from "@/infra/errors/app-error";
 
 import { IBooksRepository } from "../../repositories/Ibooks.repository";
 import { ICategoriesRepository } from "../../repositories/Icategories.repository";
-import { IRequest } from "./update-book.controller";
+import { IUpdateBookBody } from "./update-book.controller";
 
 @injectable()
 export class UpdateBookUseCase {
@@ -17,7 +17,14 @@ export class UpdateBookUseCase {
 
   async execute(
     id: string,
-    { categoryIds, author, description, price, release_year, title }: IRequest
+    {
+      categoryIds,
+      author,
+      description,
+      price,
+      release_year,
+      title,
+    }: IUpdateBookBody
   ) {
     const bookExists = await this.booksRepository.findBookById(id);
 

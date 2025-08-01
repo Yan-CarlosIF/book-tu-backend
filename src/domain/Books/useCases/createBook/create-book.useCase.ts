@@ -4,7 +4,7 @@ import { AppError } from "@/infra/errors/app-error";
 
 import { IBooksRepository } from "../../repositories/Ibooks.repository";
 import { ICategoriesRepository } from "../../repositories/Icategories.repository";
-import { IRequest } from "./create-book.controller";
+import { ICreateBookBody } from "./create-book.controller";
 
 @injectable()
 export class CreateBookUseCase {
@@ -15,7 +15,7 @@ export class CreateBookUseCase {
     private categoriesRepository: ICategoriesRepository
   ) {}
 
-  async execute(data: IRequest) {
+  async execute(data: ICreateBookBody) {
     const categories = await this.categoriesRepository.findByIds(
       data.categoryIds
     );

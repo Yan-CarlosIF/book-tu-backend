@@ -8,6 +8,10 @@ const paramsSchema = z.object({
   id: z.uuidv4(),
 });
 
+const updateCategoryBodySchema = z.object({
+  name: z.string(),
+});
+
 type IParams = z.infer<typeof paramsSchema>;
 
 export class UpdateCategoryController {
@@ -16,7 +20,7 @@ export class UpdateCategoryController {
     response: Response
   ) {
     const { id } = paramsSchema.parse(request.params);
-    const { name } = request.body;
+    const { name } = updateCategoryBodySchema.parse(request.body);
 
     const updateCategoryUseCase = container.resolve(UpdateCategoryUseCase);
 
