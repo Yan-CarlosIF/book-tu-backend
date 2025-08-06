@@ -16,8 +16,10 @@ export async function errorHandler(
   }
 
   if (error instanceof ZodError) {
+    const message = error.errors.map((err) => err.message);
+
     return response.status(400).json({
-      message: "Validation error",
+      message: message[0],
     });
   }
 
