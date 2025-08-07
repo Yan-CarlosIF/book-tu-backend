@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { CreateEstablishmentController } from "@/domain/Establishments/useCases/createEstablishment/create-establishment.controller";
+import { ListEstablishmentsController } from "@/domain/Establishments/useCases/ListEstablishments/list-establishments.controller";
 import { ListEstablishmentsWithPaginationController } from "@/domain/Establishments/useCases/ListEstablishmentsWithPagination/list-establishments-with-pagination.controller";
 
 import { authMiddleware } from "../middlewares/auth.middleware";
@@ -11,16 +12,21 @@ export const establishmentRoutes = Router();
 const createEstablishmentController = new CreateEstablishmentController();
 const listEstablishmentsWithPaginationController =
   new ListEstablishmentsWithPaginationController();
-
-establishmentRoutes.post(
-  "/",
-  authMiddleware,
-  ensureUserAdmin,
-  createEstablishmentController.handle
-);
+const listEstablishmentsController = new ListEstablishmentsController();
 
 establishmentRoutes.get(
   "/",
   authMiddleware,
   listEstablishmentsWithPaginationController.handle
+);
+establishmentRoutes.get(
+  "/all",
+  authMiddleware,
+  listEstablishmentsController.handle
+);
+establishmentRoutes.post(
+  "/",
+  authMiddleware,
+  ensureUserAdmin,
+  createEstablishmentController.handle
 );

@@ -33,4 +33,8 @@ export class EstablishmentsRepository implements IEstablishmentsRepository {
       10
     );
   }
+
+  async list(): Promise<Establishment[]> {
+    return await this.repository.find();
+  }
 }

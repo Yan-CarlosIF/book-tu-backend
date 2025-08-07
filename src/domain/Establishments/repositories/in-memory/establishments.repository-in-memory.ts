@@ -36,4 +36,8 @@ export class EstablishmentsRepositoryInMemory
       lastPage: Math.ceil(this.establishments.length / 10),
     };
   }
+
+  async list(): Promise<Establishment[]> {
+    return this.establishments;
+  }
 }
