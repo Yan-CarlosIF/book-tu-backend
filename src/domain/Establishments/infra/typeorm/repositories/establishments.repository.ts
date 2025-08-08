@@ -2,6 +2,7 @@ import { getRepository, Repository } from "typeorm";
 
 import { IPaginationData } from "@/domain/Books/dto/Ipagination-data.dto";
 import { ICreateEstablishmentDTO } from "@/domain/Establishments/dto/Icreate-establishment.dto";
+import { IUpdateEstablishmentDTO } from "@/domain/Establishments/dto/Iupdate-establishment.dto";
 import { IEstablishmentsRepository } from "@/domain/Establishments/repositories/Iestablishments.repository";
 import { pagination } from "@/utils/pagination";
 
@@ -24,6 +25,10 @@ export class EstablishmentsRepository implements IEstablishmentsRepository {
     return await this.repository.findOne({ cnpj });
   }
 
+  async findById(id: string): Promise<Establishment | undefined> {
+    return await this.repository.findOne({ id });
+  }
+
   async listWithPagination(page: number): Promise<IPaginationData> {
     const establishmentsQueryBuilder = this.repository.createQueryBuilder();
 
@@ -36,5 +41,20 @@ export class EstablishmentsRepository implements IEstablishmentsRepository {
 
   async list(): Promise<Establishment[]> {
     return await this.repository.find();
+  }
+
+  async update(
+    establishment: Establishment,
+    data: IUpdateEstablishmentDTO
+  ): Promise<void> {
+    await this.repository.update(establishment.id, {
+      name: data.name ?? establishment.name,
+      cnpj: data.cnpj ?? establishment.cnpj,
+      state: data.state ?? establishment.state,
+      city: data.city ?? establishment.city,
+      district: data.district ?? establishment.district,
+      cep: data.cep ?? establishment.cep,
+      description: data.description ?? establishment.description,
+    });
   }
 }

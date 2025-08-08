@@ -145,3 +145,44 @@ Authorization: Bearer {{authToken}}
     "price": 1000,
     "categoryIds": []
 }
+
+###
+
+# @name createEstablishment
+POST {{baseUrl}}/establishments
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "name": "Estabelecimento Teste",
+    "cnpj": "44.595.458/0001-06",
+    "state": "Ceará",
+    "city": "Aracati",
+    "district": "Rua doida",
+    "cep": "62800-000",
+    "description": "Teste de criação de estabelecimento"
+}
+
+### 
+
+# @name listEstablishmentsWithPagination
+GET {{baseUrl}}/establishments
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name listAllEstablishments
+GET {{baseUrl}}/establishments/all
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name updateEstablishment
+
+PATCH {{baseUrl}}/establishments/7ceacc14-e28f-4e35-905e-6fa09cc58041
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "name": "Test Name"
+}

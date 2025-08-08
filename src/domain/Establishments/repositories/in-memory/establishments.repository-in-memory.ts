@@ -1,6 +1,8 @@
 import { IPaginationData } from "@/domain/Books/dto/Ipagination-data.dto";
+import { AppError } from "@/infra/errors/app-error";
 
 import { ICreateEstablishmentDTO } from "../../dto/Icreate-establishment.dto";
+import { IUpdateEstablishmentDTO } from "../../dto/Iupdate-establishment.dto";
 import { Establishment } from "../../infra/typeorm/entities/Establishment";
 import { IEstablishmentsRepository } from "../Iestablishments.repository";
 
@@ -23,6 +25,10 @@ export class EstablishmentsRepositoryInMemory
     );
   }
 
+  async findById(id: string): Promise<Establishment | undefined> {
+    return this.establishments.find((establishment) => establishment.id === id);
+  }
+
   async listWithPagination(page: number): Promise<IPaginationData> {
     const establishments = this.establishments.slice(
       (page - 1) * 10,
@@ -39,5 +45,20 @@ export class EstablishmentsRepositoryInMemory
 
   async list(): Promise<Establishment[]> {
     return this.establishments;
+  }
+
+  async update(
+    { id }: Establishment,
+    data: IUpdateEstablishmentDTO
+  ): Promise<void> {
+    const establishment = this.establishments.find(
+      (establishment) => establishment.id === id
+    );
+
+    if (!establishment) {
+      throw new AppError("Establishment not found");
+    }
+
+    Object.assign(establishment, data);
   }
 }
