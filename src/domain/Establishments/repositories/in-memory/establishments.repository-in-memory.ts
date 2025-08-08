@@ -61,4 +61,18 @@ export class EstablishmentsRepositoryInMemory
 
     Object.assign(establishment, data);
   }
+
+  async delete(id: string): Promise<void> {
+    const establishment = this.establishments.find(
+      (establishment) => establishment.id === id
+    );
+
+    if (!establishment) {
+      throw new AppError("Establishment not found");
+    }
+
+    this.establishments = this.establishments.filter(
+      (establishment) => establishment.id !== id
+    );
+  }
 }

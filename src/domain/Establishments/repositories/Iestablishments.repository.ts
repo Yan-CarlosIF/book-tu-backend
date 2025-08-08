@@ -14,4 +14,5 @@ export interface IEstablishmentsRepository {
     establishment: Establishment,
     data: IUpdateEstablishmentDTO
   ): Promise<void>;
+  delete(id: string): Promise<void>;
 }

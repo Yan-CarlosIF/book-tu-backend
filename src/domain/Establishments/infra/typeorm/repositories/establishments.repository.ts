@@ -57,4 +57,8 @@ export class EstablishmentsRepository implements IEstablishmentsRepository {
       description: data.description ?? establishment.description,
     });
   }
+
+  async delete(id: string): Promise<void> {
+    await this.repository.delete(id);
+  }
 }
