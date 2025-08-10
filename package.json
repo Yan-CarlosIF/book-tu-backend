@@ -8,7 +8,7 @@
     "typeorm": "tsx node_modules/typeorm/cli.js",
     "lint": "eslint . --ext .ts",
     "test": "NODE_ENV=test jest --detectOpenHandles --runInBand",
-    "seed": "tsx src/infra/typeorm/seed/index.ts"
+    "seed": "tsx src/infra/typeorm/seed/runSeed.ts"
   },
   "keywords": [],
   "author": "",

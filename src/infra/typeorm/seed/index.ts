@@ -14,7 +14,7 @@ import createConnection from "../index";
 import { booksTitles } from "./seedBooks";
 import { categoriesNames } from "./seedCategories";
 
-async function seed() {
+export async function seed() {
   const connection = await createConnection("localhost");
   await connection.dropDatabase();
   await connection.runMigrations();
@@ -130,12 +130,5 @@ async function seed() {
 
   await stockItemsRepository.save(stockItems);
 
-  await connection.close();
+  return connection;
 }
-
-seed()
-  .then(() => console.log("Seed finished"))
-  .catch((err) => {
-    console.error(err);
-    console.error("Error during seed");
-  });

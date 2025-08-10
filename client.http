@@ -191,4 +191,5 @@ Authorization: Bearer {{authToken}}
 
 # @name listStockItems
 
-GET {{baseUrl}}/stocks?page=2&establishmentId=d5dab084-8794-4872-add6-a21fdf917e83
+GET {{baseUrl}}/stocks?page=2
+Authorization: Bearer {{authToken}}
