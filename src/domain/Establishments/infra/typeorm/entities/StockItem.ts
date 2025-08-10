@@ -5,6 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { v4 as uuid } from "uuid";
 
 import { Book } from "@/domain/Books/infra/typeorm/entities/Book";
 
@@ -31,4 +32,8 @@ export class StockItem {
   @ManyToOne(() => Book)
   @JoinColumn({ name: "book_id" })
   book: Book;
+
+  constructor() {
+    if (!this.id) this.id = uuid();
+  }
 }

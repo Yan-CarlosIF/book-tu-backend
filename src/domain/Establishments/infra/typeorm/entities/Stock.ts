@@ -1,4 +1,5 @@
 import {
+  Column,
   Entity,
   JoinColumn,
   OneToMany,
@@ -15,7 +16,7 @@ export class Stock {
   @PrimaryColumn("uuid")
   id: string;
 
-  @PrimaryColumn("uuid")
+  @Column("uuid", { unique: true })
   establishment_id: string;
 
   @OneToOne(() => Establishment, (establishment) => establishment.stock)

@@ -7,18 +7,27 @@ import { IEstablishmentsRepository } from "@/domain/Establishments/repositories/
 import { pagination } from "@/utils/pagination";
 
 import { Establishment } from "../entities/Establishment";
+import { Stock } from "../entities/Stock";
 
 export class EstablishmentsRepository implements IEstablishmentsRepository {
   private repository: Repository<Establishment>;
+  private stockRepository: Repository<Stock>;
 
   constructor() {
     this.repository = getRepository(Establishment);
+    this.stockRepository = getRepository(Stock);
   }
 
   async create(data: ICreateEstablishmentDTO): Promise<void> {
     const establishment = this.repository.create(data);
 
     await this.repository.save(establishment);
+
+    const stock = this.stockRepository.create({
+      establishment_id: establishment.id,
+    });
+
+    await this.stockRepository.save(stock);
   }
 
   async findByCnpj(cnpj: string): Promise<Establishment | undefined> {

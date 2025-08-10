@@ -1,3 +1,5 @@
+import { IPaginationData } from "@/domain/Books/dto/Ipagination-data.dto";
+
 export interface IStocksRepository {
-  listAllStocksItems(): Promise<void>;
+  listStocksItems(page: number, id?: string): Promise<IPaginationData>;
 }
