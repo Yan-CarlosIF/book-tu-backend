@@ -12,26 +12,12 @@ export class CreateStocksTable1754518907774 implements MigrationInterface {
             isPrimary: true,
           },
           {
-            name: "book_id",
-            type: "uuid",
-          },
-          {
             name: "establishment_id",
             type: "uuid",
-          },
-          {
-            name: "quantity",
-            type: "integer",
+            isUnique: true,
           },
         ],
         foreignKeys: [
-          {
-            name: "FKBookStock",
-            referencedTableName: "books",
-            referencedColumnNames: ["id"],
-            columnNames: ["book_id"],
-            onDelete: "CASCADE",
-          },
           {
             name: "FKEstablishmentStock",
             referencedTableName: "establishments",
