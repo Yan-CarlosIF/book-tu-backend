@@ -1,5 +1,7 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
+
+import { Stock } from "./Stock";
 
 @Entity("establishments")
 export class Establishment {
@@ -26,6 +28,9 @@ export class Establishment {
 
   @Column("text", { nullable: true, default: null })
   description?: string;
+
+  @OneToOne(() => Stock, (stock) => stock.establishment)
+  stock: Stock;
 
   constructor() {
     if (!this.id) this.id = uuidv4();
