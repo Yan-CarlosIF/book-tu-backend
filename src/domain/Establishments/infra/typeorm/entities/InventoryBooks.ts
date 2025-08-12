@@ -15,7 +15,9 @@ export class InventoryBooks {
   @Column("uuid")
   inventory_id: string;
 
-  @ManyToOne(() => Inventory, (inventory) => inventory.books)
+  @ManyToOne(() => Inventory, (inventory) => inventory.books, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "inventory_id" })
   inventory: Inventory;
 

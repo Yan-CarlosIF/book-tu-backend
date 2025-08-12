@@ -40,6 +40,7 @@ export class Inventory {
 
   @OneToMany(() => InventoryBooks, (books) => books.inventory, {
     cascade: true,
+    eager: true,
   })
   books: InventoryBooks[];
 

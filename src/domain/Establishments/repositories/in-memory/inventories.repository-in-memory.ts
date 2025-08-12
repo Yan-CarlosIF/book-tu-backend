@@ -1,3 +1,5 @@
+import { v4 } from "uuid";
+
 import { IPaginationData } from "@/domain/Books/dto/Ipagination-data.dto";
 
 import { ICreateInventoryDTO } from "../../dto/Icreate-inventory.dto";
@@ -35,7 +37,7 @@ export class InventoriesRepositoryInMemory implements IInventoriesRepository {
 
     const startIndex = (page - 1) * 10;
     const endIndex = page * 10;
-    
+
     const paginatedInventories = filteredInventories.slice(
       startIndex,
       endIndex
@@ -47,5 +49,40 @@ export class InventoriesRepositoryInMemory implements IInventoriesRepository {
       total: filteredInventories.length,
       lastPage: Math.ceil(filteredInventories.length / 10),
     };
+  }
+
+  async update(
+    id: string,
+    data: { book_id: string; quantity: number }[]
+  ): Promise<void> {
+    const inventory = this.inventories.find((inventory) => inventory.id === id);
+
+    if (!inventory) {
+      throw new Error("Inventory not found");
+    }
+
+    inventory.books = data.map((book) => {
+      return {
+        book_id: book.book_id,
+        quantity: book.quantity,
+        id: v4(),
+        book: {
+          id: book.book_id,
+          title: "",
+          author: "",
+          release_year: 0,
+          price: 0,
+          description: "",
+          categories: [],
+        },
+        inventory_id: id,
+        inventory: inventory,
+      };
+    });
+
+    inventory.total_quantity = data.reduce(
+      (total, book) => total + book.quantity,
+      0
+    );
   }
 }

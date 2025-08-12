@@ -53,4 +53,31 @@ export class InventoriesRepository implements IInventoriesRepository {
 
     return await pagination<Inventory>(queryBuilder, page, 10);
   }
+
+  async update(
+    id: string,
+    data: { book_id: string; quantity: number }[]
+  ): Promise<void> {
+    const inventory = await this.repository.findOne(id, {
+      relations: ["books"],
+    });
+
+    if (!inventory) {
+      throw new Error("Inventory not found");
+    }
+
+    await this.repository.manager.delete(InventoryBooks, {
+      inventory_id: inventory.id,
+    });
+
+    inventory.books = data.map((book) => {
+      return this.repository.manager.create(InventoryBooks, {
+        inventory,
+        book_id: book.book_id,
+        quantity: book.quantity,
+      });
+    });
+
+    await this.repository.save(inventory);
+  }
 }
