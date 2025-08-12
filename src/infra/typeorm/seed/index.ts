@@ -6,6 +6,11 @@ import { v4 } from "uuid";
 import { Book } from "@/domain/Books/infra/typeorm/entities/Book";
 import { Category } from "@/domain/Books/infra/typeorm/entities/Category";
 import { Establishment } from "@/domain/Establishments/infra/typeorm/entities/Establishment";
+import {
+  Inventory,
+  Status,
+} from "@/domain/Establishments/infra/typeorm/entities/Inventory";
+import { InventoryBooks } from "@/domain/Establishments/infra/typeorm/entities/InventoryBooks";
 import { Stock } from "@/domain/Establishments/infra/typeorm/entities/Stock";
 import { StockItem } from "@/domain/Establishments/infra/typeorm/entities/StockItem";
 import { Permission, User } from "@/domain/Users/infra/typeorm/entities/User";
@@ -27,6 +32,8 @@ export async function seed() {
   const establishmentsRepository = getRepository(Establishment);
   const stocksRepository = getRepository(Stock);
   const stockItemsRepository = getRepository(StockItem);
+  const inventoriesRepository = getRepository(Inventory);
+  const inventoryBooksRepository = getRepository(InventoryBooks);
 
   // ---------- Usuários ----------
   const admin = usersRepository.create({
@@ -129,6 +136,56 @@ export async function seed() {
   }
 
   await stockItemsRepository.save(stockItems);
+
+  // ---------- Inventários ----------
+  const inventories: Inventory[] = [];
+  const inventoryBooks: InventoryBooks[] = [];
+
+  for (const est of establishments) {
+    // cria entre 1 e 3 inventários por estabelecimento
+    const numInventories = faker.number.int({ min: 1, max: 3 });
+
+    for (let i = 0; i < numInventories; i++) {
+      const inventory = inventoriesRepository.create({
+        establishment_id: est.id,
+        total_quantity: 0,
+        status: Status.UNPROCESSED,
+      });
+
+      inventories.push(inventory);
+    }
+  }
+
+  await inventoriesRepository.save(inventories);
+
+  // vincula livros aos inventários
+  for (const inv of inventories) {
+    const randomBooks = faker.helpers.arrayElements(
+      books,
+      faker.number.int({ min: 2, max: 5 })
+    );
+
+    let total = 0;
+
+    for (const book of randomBooks) {
+      const quantity = faker.number.int({ min: 1, max: 20 });
+      total += quantity;
+
+      inventoryBooks.push(
+        inventoryBooksRepository.create({
+          inventory_id: inv.id,
+          book_id: book.id,
+          quantity,
+        })
+      );
+    }
+
+    // atualiza total_quantity
+    inv.total_quantity = total;
+  }
+
+  await inventoriesRepository.save(inventories);
+  await inventoryBooksRepository.save(inventoryBooks);
 
   return connection;
 }
