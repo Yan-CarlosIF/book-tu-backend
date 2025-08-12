@@ -45,14 +45,21 @@ describe("[POST] /inventories", () => {
       })
       .set({ Authorization: `Bearer ${token}` });
 
-    const [inventory] = await connection.query(
-      `SELECT * FROM inventories WHERE establishment_id = '${establishmentId}'`
-    );
+    const {
+      body: {
+        data: [inventory],
+      },
+    } = await request(app)
+      .get("/inventories")
+      .set({
+        Authorization: `Bearer ${token}`,
+      });
 
     expect(response.status).toBe(201);
     expect(inventory.total_quantity).toBe(5 * booksIds.length);
     expect(inventory.establishment_id).toBe(establishmentId);
     expect(inventory.status).toBe("unprocessed");
+    expect(inventory.books.length).toBe(5);
   });
 
   it("should not be able to create a new inventory if user is not authenticated", async () => {

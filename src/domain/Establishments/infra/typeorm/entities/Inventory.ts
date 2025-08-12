@@ -1,4 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryColumn,
+} from "typeorm";
 import { v4 as uuid } from "uuid";
 
 import { Establishment } from "./Establishment";
@@ -31,7 +38,9 @@ export class Inventory {
   @JoinColumn({ name: "establishment_id" })
   establishment: Establishment;
 
-  @OneToMany(() => InventoryBooks, (books) => books.inventory)
+  @OneToMany(() => InventoryBooks, (books) => books.inventory, {
+    cascade: true,
+  })
   books: InventoryBooks[];
 
   @Column({
