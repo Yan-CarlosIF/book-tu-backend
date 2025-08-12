@@ -80,4 +80,8 @@ export class InventoriesRepository implements IInventoriesRepository {
 
     await this.repository.save(inventory);
   }
+
+  async delete(id: string): Promise<void> {
+    await this.repository.delete(id);
+  }
 }

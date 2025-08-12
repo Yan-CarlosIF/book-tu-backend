@@ -11,4 +11,5 @@ export interface IInventoriesRepository {
     id: string,
     data: { book_id: string; quantity: number }[]
   ): Promise<void>;
+  delete(id: string): Promise<void>;
 }

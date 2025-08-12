@@ -85,4 +85,10 @@ export class InventoriesRepositoryInMemory implements IInventoriesRepository {
       0
     );
   }
+
+  async delete(id: string): Promise<void> {
+    this.inventories = this.inventories.filter(
+      (inventory) => inventory.id !== id
+    );
+  }
 }
