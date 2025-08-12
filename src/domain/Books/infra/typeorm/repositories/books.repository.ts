@@ -79,4 +79,10 @@ export class BooksRepository implements IBooksRepository {
 
     return await pagination<Book>(queryBuilder, page, 10);
   }
+
+  async findBooksByIds(ids: string[]): Promise<Book[]> {
+    return await this.repository.findByIds(ids, {
+      relations: ["categories"],
+    });
+  }
 }

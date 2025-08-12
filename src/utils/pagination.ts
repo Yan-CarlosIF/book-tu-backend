@@ -3,11 +3,12 @@ import { SelectQueryBuilder } from "typeorm";
 import { Book } from "@/domain/Books/infra/typeorm/entities/Book";
 import { Category } from "@/domain/Books/infra/typeorm/entities/Category";
 import { Establishment } from "@/domain/Establishments/infra/typeorm/entities/Establishment";
+import { Inventory } from "@/domain/Establishments/infra/typeorm/entities/Inventory";
 import { StockItem } from "@/domain/Establishments/infra/typeorm/entities/StockItem";
 import { User } from "@/domain/Users/infra/typeorm/entities/User";
 
 export async function pagination<
-  T extends Book | Category | User | Establishment | StockItem
+  T extends Book | Category | User | Establishment | StockItem | Inventory
 >(queryBuilder: SelectQueryBuilder<T>, page: number, limit: number) {
   const safePage = Math.max(Number(page) || 1, 1);
 

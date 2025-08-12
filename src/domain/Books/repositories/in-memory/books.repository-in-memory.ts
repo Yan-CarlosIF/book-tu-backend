@@ -78,4 +78,8 @@ export class BooksRepositoryInMemory implements IBooksRepository {
       total: this.books.length,
     };
   }
+
+  async findBooksByIds(ids: string[]): Promise<Book[]> {
+    return this.books.filter((book) => ids.includes(book.id));
+  }
 }
