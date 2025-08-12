@@ -1,5 +1,6 @@
 import request from "supertest";
 import { Connection } from "typeorm";
+import { v4 } from "uuid";
 
 import { app } from "@/infra/http/app";
 import { seed } from "@/infra/typeorm/seed";
@@ -82,5 +83,39 @@ describe("[POST] /inventories", () => {
 
     expect(response.status).toBe(401);
     expect(response.body.message).toBe("Token not found");
+  });
+
+  it("should not be able to create a new inventory if establishment does not exist", async () => {
+    const response = await request(app)
+      .post("/inventories")
+      .send({
+        establishment_id: v4(),
+        total_quantity: 0,
+        inventoryBooks: [],
+      })
+      .set({ Authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("Estabelecimento não encontrado");
+  });
+
+  it("should not be able to create a new inventory if books does not exist", async () => {
+    const [{ id: establishmentId }] = await connection.query(
+      `SELECT id FROM establishments LIMIT 1`
+    );
+
+    const response = await request(app)
+      .post("/inventories")
+      .send({
+        establishment_id: establishmentId,
+        total_quantity: 0,
+        inventoryBooks: [{ book_id: v4(), quantity: 0 }],
+      })
+      .set({ Authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(404);
+    expect(response.body.message.normalize("NFC")).toEqual(
+      "Um ou mais livros não são válidos".normalize("NFC")
+    );
   });
 });

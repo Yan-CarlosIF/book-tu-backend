@@ -4,6 +4,7 @@ import { IBooksRepository } from "@/domain/Books/repositories/Ibooks.repository"
 import { AppError } from "@/infra/errors/app-error";
 
 import { ICreateInventoryDTO } from "../../dto/Icreate-inventory.dto";
+import { IEstablishmentsRepository } from "../../repositories/Iestablishments.repository";
 import { IInventoriesRepository } from "../../repositories/Iinventories.repository";
 
 @injectable()
@@ -12,10 +13,20 @@ export class CreateInventoryUseCase {
     @inject("InventoriesRepository")
     private inventoriesRepository: IInventoriesRepository,
     @inject("BooksRepository")
-    private booksRepository: IBooksRepository
+    private booksRepository: IBooksRepository,
+    @inject("EstablishmentsRepository")
+    private establishmentsRepository: IEstablishmentsRepository
   ) {}
 
   async execute(data: ICreateInventoryDTO) {
+    const establishment = await this.establishmentsRepository.findById(
+      data.establishment_id
+    );
+
+    if (!establishment) {
+      throw new AppError("Estabelecimento não encontrado", 404);
+    }
+
     const books = await this.booksRepository.findBooksByIds(
       data.inventoryBooks.map((book) => book.book_id)
     );
