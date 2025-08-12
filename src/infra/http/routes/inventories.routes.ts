@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { CreateInventoryController } from "@/domain/Establishments/useCases/createInventory/create-inventory.controller";
-import { ListInventoriesController } from "@/domain/Establishments/useCases/listInvetories/list-inventories.controller";
+import { ListInventoriesController } from "@/domain/Establishments/useCases/listInventories/list-inventories.controller";
 
 import { authMiddleware } from "../middlewares/auth.middleware";
 

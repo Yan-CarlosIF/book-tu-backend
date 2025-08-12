@@ -35,10 +35,14 @@ export class InventoriesRepositoryInMemory implements IInventoriesRepository {
 
     const startIndex = (page - 1) * 10;
     const endIndex = page * 10;
-    filteredInventories = filteredInventories.slice(startIndex, endIndex);
+    
+    const paginatedInventories = filteredInventories.slice(
+      startIndex,
+      endIndex
+    );
 
     return {
-      data: filteredInventories,
+      data: paginatedInventories,
       page,
       total: filteredInventories.length,
       lastPage: Math.ceil(filteredInventories.length / 10),
