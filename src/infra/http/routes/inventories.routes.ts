@@ -6,6 +6,7 @@ import { ListInventoriesController } from "@/domain/Establishments/useCases/list
 import { UpdateInventoryController } from "@/domain/Establishments/useCases/updateInventory/update-inventory.controller";
 
 import { authMiddleware } from "../middlewares/auth.middleware";
+import { ensureUserAdmin } from "../middlewares/ensure-user-admin.middleware";
 
 export const inventoriesRoutes = Router();
 
@@ -20,5 +21,6 @@ inventoriesRoutes.put("/:id", authMiddleware, updateInventoryController.handle);
 inventoriesRoutes.delete(
   "/:id",
   authMiddleware,
+  ensureUserAdmin,
   deleteInventoryController.handle
 );

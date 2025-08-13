@@ -116,4 +116,33 @@ describe("[PUT] /inventories/:id", () => {
       "Um ou mais livros não são válidos".normalize("NFC")
     );
   });
+
+  it("should not be able to update a processed inventory", async () => {
+    const [inventory] = await connection.query(
+      `SELECT * FROM inventories LIMIT 1`
+    );
+
+    await connection.query(
+      `UPDATE inventories SET status = 'processed' WHERE id = '${inventory.id}'`
+    );
+
+    const [book] = await connection.query(`SELECT * FROM books LIMIT 1`);
+
+    const response = await request(app)
+      .put(`/inventories/${inventory.id}`)
+      .send({
+        inventoryBooks: [
+          {
+            book_id: book.id,
+            quantity: 5,
+          },
+        ],
+      })
+      .set({ Authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe(
+      "Não é possivel atualizar um inventário processado"
+    );
+  });
 });

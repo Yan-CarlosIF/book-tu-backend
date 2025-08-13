@@ -22,6 +22,13 @@ export class UpdateInventoryUseCase {
       throw new AppError("Inventário não encontrado", 404);
     }
 
+    if (inventory.status === "processed") {
+      throw new AppError(
+        "Não é possivel atualizar um inventário processado",
+        400
+      );
+    }
+
     const books = await this.booksRepository.findBooksByIds(
       inventoryBooks.map((book) => book.book_id)
     );
