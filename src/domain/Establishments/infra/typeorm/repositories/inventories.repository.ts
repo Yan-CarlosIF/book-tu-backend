@@ -36,7 +36,17 @@ export class InventoriesRepository implements IInventoriesRepository {
   }
 
   async findInventoryById(id: string): Promise<Inventory | undefined> {
-    return await this.repository.findOne({ id });
+    return await this.repository.findOne(
+      { id },
+      {
+        relations: [
+          "books",
+          "books.book",
+          "books.book.categories",
+          "establishment",
+        ],
+      }
+    );
   }
 
   async list(page: number, establishmentId?: string): Promise<IPaginationData> {
@@ -45,7 +55,8 @@ export class InventoriesRepository implements IInventoriesRepository {
     queryBuilder
       .leftJoinAndSelect("inventories.establishment", "establishment")
       .leftJoinAndSelect("inventories.books", "books")
-      .leftJoinAndSelect("books.book", "book");
+      .leftJoinAndSelect("books.book", "book")
+      .leftJoinAndSelect("book.categories", "categories");
 
     if (establishmentId) {
       queryBuilder.where("establishment.id = :id", { id: establishmentId });

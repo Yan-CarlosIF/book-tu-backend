@@ -224,3 +224,9 @@ Authorization: Bearer {{authToken}}
 
 GET {{baseUrl}}/inventories
 Authorization: Bearer {{authToken}}
+
+###
+
+# @name getInventory
+GET {{baseUrl}}/inventories/53672b90-291b-49a0-8bcd-8044aba486f7
+Authorization: Bearer {{authToken}}
