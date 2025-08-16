@@ -7,6 +7,7 @@ import { StockItem } from "../../infra/typeorm/entities/StockItem";
 import { IStocksRepository } from "../Istocks.repository";
 
 export class StocksRepositoryInMemory implements IStocksRepository {
+  stocks: Stock[] = [];
   stockItems: StockItem[] = [];
 
   async seedStock(establishment: Establishment, books: Book[]) {
@@ -25,7 +26,8 @@ export class StocksRepositoryInMemory implements IStocksRepository {
     });
 
     stock1.books = newStockItems;
-
+    
+    this.stocks.push(stock1);
     this.stockItems.push(...newStockItems);
   }
 
@@ -46,5 +48,8 @@ export class StocksRepositoryInMemory implements IStocksRepository {
       page,
       lastPage: Math.ceil(filteredItems.length / 10),
     };
+  }
+  async findStockByEstablishmentId(id: string): Promise<Stock | undefined> {
+    return this.stocks.find((stock) => stock.establishment_id === id);
   }
 }

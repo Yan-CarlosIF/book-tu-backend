@@ -91,4 +91,8 @@ export class InventoriesRepositoryInMemory implements IInventoriesRepository {
       (inventory) => inventory.id !== id
     );
   }
+
+  async process(inventory: Inventory): Promise<void> {
+    console.log(inventory);
+  }
 }

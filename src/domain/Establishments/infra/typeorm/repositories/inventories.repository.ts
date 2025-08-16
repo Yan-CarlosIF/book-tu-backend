@@ -7,6 +7,8 @@ import { pagination } from "@/utils/pagination";
 
 import { Inventory, Status } from "../entities/Inventory";
 import { InventoryBooks } from "../entities/InventoryBooks";
+import { Stock } from "../entities/Stock";
+import { StockItem } from "../entities/StockItem";
 
 export class InventoriesRepository implements IInventoriesRepository {
   private repository: Repository<Inventory>;
@@ -94,5 +96,31 @@ export class InventoriesRepository implements IInventoriesRepository {
 
   async delete(id: string): Promise<void> {
     await this.repository.delete(id);
+  }
+
+  async process(inventory: Inventory, stock: Stock): Promise<void> {
+    const stocksRepository = getRepository(Stock);
+    const stockItemRepository = getRepository(StockItem);
+
+    if (!stock.id) {
+      await stocksRepository.save(stock);
+    }
+
+    await stockItemRepository.delete({ stock_id: stock.id });
+
+    const newStockItems = inventory.books.map((b) =>
+      stockItemRepository.create({
+        stock_id: stock.id,
+        book_id: b.book_id,
+        quantity: b.quantity,
+      })
+    );
+
+    await stockItemRepository.save(newStockItems);
+
+    await this.repository.update(
+      { id: inventory.id },
+      { status: Status.PROCESSED }
+    );
   }
 }

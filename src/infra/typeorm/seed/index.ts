@@ -45,6 +45,15 @@ export async function seed() {
     permission: Permission.ADMIN,
   });
 
+  const yan = usersRepository.create({
+    name: "Yan",
+    login: "yanzin",
+    password: hashedPassword,
+    registration: "143435642367",
+    role: "Developer",
+    permission: Permission.OPERATOR,
+  });
+
   const users = usersRepository.create(
     Array.from({
       length: 10,
@@ -65,7 +74,7 @@ export async function seed() {
     }))
   );
 
-  await usersRepository.save([admin, ...users]);
+  await usersRepository.save([yan, admin, ...users]);
   await categoriesRepository.save(categories);
 
   // ---------- Livros ----------

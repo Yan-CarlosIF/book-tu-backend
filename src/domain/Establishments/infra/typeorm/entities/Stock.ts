@@ -23,7 +23,10 @@ export class Stock {
   @JoinColumn({ name: "establishment_id" })
   establishment: Establishment;
 
-  @OneToMany(() => StockItem, (stockItem) => stockItem.stock)
+  @OneToMany(() => StockItem, (stockItem) => stockItem.stock, {
+    cascade: true,
+    eager: true,
+  })
   books: StockItem[];
 
   constructor() {

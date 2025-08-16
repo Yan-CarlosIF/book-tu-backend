@@ -30,4 +30,11 @@ export class StocksRepository implements IStocksRepository {
 
     return await pagination<StockItem>(queryBuilder, page, 10);
   }
+
+  async findStockByEstablishmentId(id: string): Promise<Stock | undefined> {
+    return await this.stocks.findOne({
+      where: { establishment_id: id },
+      relations: ["books"],
+    });
+  }
 }
