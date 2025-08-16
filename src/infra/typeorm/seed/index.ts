@@ -78,6 +78,16 @@ export async function seed() {
   await categoriesRepository.save(categories);
 
   // ---------- Livros ----------
+  const usedBooksIdentifiers = new Set();
+  function generateUniqueIdentifier(length = 6) {
+    let id;
+    do {
+      id = faker.string.alphanumeric(length);
+    } while (usedBooksIdentifiers.has(id));
+    usedBooksIdentifiers.add(id);
+    return id;
+  }
+
   const books = booksRepository.create(
     booksTitles.map((title) => {
       const randomCategories = faker.helpers.arrayElements(
@@ -87,6 +97,7 @@ export async function seed() {
 
       return {
         title,
+        identifier: generateUniqueIdentifier(),
         author: fakerPT_BR.person.firstName(),
         release_year: fakerPT_BR.date.past().getFullYear(),
         price: faker.number.float({ min: 10, max: 100 }),

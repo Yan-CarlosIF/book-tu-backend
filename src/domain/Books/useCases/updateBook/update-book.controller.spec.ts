@@ -43,6 +43,7 @@ describe("[PATCH] /books/:id", () => {
       })
       .send({
         title: "Book 1",
+        identifier: "12314",
         author: "Author 1",
         release_year: 2000,
         price: 10,
@@ -67,25 +68,25 @@ describe("[PATCH] /books/:id", () => {
       })
       .send({
         title: "Book 2",
+        identifier: "123",
         author: "Author 2",
         release_year: 2001,
         price: 20,
         description: "Description 2",
       });
 
-    const {
-      body: { books: updatedBooks },
-    } = await request(app)
-      .get("/books")
+    const { body: updatedBook } = await request(app)
+      .get(`/books/${id}`)
       .set({
         Authorization: `Bearer ${token}`,
       });
 
-    expect(updatedBooks[0].id).toBe(id);
-    expect(updatedBooks[0].title).toBe("Book 2");
-    expect(updatedBooks[0].author).toBe("Author 2");
-    expect(updatedBooks[0].release_year).toBe(2001);
-    expect(updatedBooks[0].description).toBe("Description 2");
+    expect(updatedBook.id).toBe(id);
+    expect(updatedBook.title).toBe("Book 2");
+    expect(updatedBook.identifier).toBe("123");
+    expect(updatedBook.author).toBe("Author 2");
+    expect(updatedBook.release_year).toBe(2001);
+    expect(updatedBook.description).toBe("Description 2");
 
     expect(response.status).toBe(204);
   });
@@ -179,5 +180,58 @@ describe("[PATCH] /books/:id", () => {
 
     expect(response.status).toBe(401);
     expect(response.body.message).toBe("Token not found");
+  });
+
+  it("should not be able to update a book if identifier is already in use", async () => {
+    const responseAuth = await request(app).post("/auth/session").send({
+      login: "user-test",
+      password: "123",
+    });
+
+    const { token } = responseAuth.body;
+
+    const {
+      body: { books },
+    } = await request(app)
+      .get("/books")
+      .set({
+        Authorization: `Bearer ${token}`,
+      });
+
+    const { id } = books[0];
+
+    await request(app)
+      .post("/books")
+      .set({
+        Authorization: `Bearer ${token}`,
+      })
+      .send({
+        title: "Book 2",
+        identifier: "1234",
+        author: "Author 2",
+        release_year: 2001,
+        price: 20,
+        description: "Description 2",
+        categoryIds: [],
+      });
+
+    const response = await request(app)
+      .patch(`/books/${id}`)
+      .set({
+        Authorization: `Bearer ${token}`,
+      })
+      .send({
+        title: "Book 2",
+        identifier: "1234",
+        author: "Author 2",
+        release_year: 2001,
+        price: 20,
+        description: "Description 2",
+      });
+
+    expect(response.status).toBe(409);
+    expect(response.body.message).toBe(
+      "Livro com o mesmo identificador já cadastrado"
+    );
   });
 });

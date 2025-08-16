@@ -19,6 +19,7 @@ export class UpdateBookUseCase {
     id: string,
     {
       categoryIds,
+      identifier,
       author,
       description,
       price,
@@ -42,8 +43,20 @@ export class UpdateBookUseCase {
       }
     }
 
+    if (identifier && identifier !== bookExists.identifier) {
+      const book = await this.booksRepository.findBookByIdentifier(identifier);
+
+      if (book && book.id !== id) {
+        throw new AppError(
+          "Livro com o mesmo identificador já cadastrado",
+          409
+        );
+      }
+    }
+
     await this.booksRepository.update(bookExists, {
       author,
+      identifier,
       description,
       price,
       release_year,

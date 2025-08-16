@@ -25,6 +25,7 @@ describe("[POST] /books", () => {
 
     await createBookUseCase.execute({
       title: "Book 1",
+      identifier: "12314",
       author: "Author 1",
       release_year: 2000,
       price: 10,
@@ -40,6 +41,7 @@ describe("[POST] /books", () => {
 
     await createBookUseCase.execute({
       title: "Book 1",
+      identifier: "12314",
       author: "Author 1",
       release_year: 2000,
       price: 10,
@@ -58,6 +60,7 @@ describe("[POST] /books", () => {
     await expect(
       createBookUseCase.execute({
         title: "Book 1",
+        identifier: "12314",
         author: "Author 1",
         release_year: 2000,
         price: 10,
@@ -65,5 +68,31 @@ describe("[POST] /books", () => {
         categoryIds: [v4()],
       })
     ).rejects.toEqual(new AppError("One or more categories not found", 404));
+  });
+
+  it("should not be able to create a new book if identifier is already in use", async () => {
+    await createBookUseCase.execute({
+      title: "Book 1",
+      identifier: "12314",
+      author: "Author 1",
+      release_year: 2000,
+      price: 10,
+      description: "Description 1",
+      categoryIds: [],
+    });
+
+    await expect(
+      createBookUseCase.execute({
+        title: "Book 1",
+        identifier: "12314",
+        author: "Author 1",
+        release_year: 2000,
+        price: 10,
+        description: "Description 1",
+        categoryIds: [],
+      })
+    ).rejects.toEqual(
+      new AppError("Livro com o mesmo identificador já cadastrado", 409)
+    );
   });
 });

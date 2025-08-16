@@ -24,8 +24,17 @@ export class CreateBookUseCase {
       throw new AppError("One or more categories not found", 404);
     }
 
+    const book = await this.booksRepository.findBookByIdentifier(
+      data.identifier
+    );
+
+    if (book) {
+      throw new AppError("Livro com o mesmo identificador já cadastrado", 409);
+    }
+
     await this.booksRepository.create({
       title: data.title,
+      identifier: data.identifier,
       author: data.author,
       release_year: data.release_year,
       price: data.price,

@@ -7,6 +7,7 @@ export interface IBooksRepository {
   create(data: ICreateBookDTO): Promise<void>;
   findBookById(id: string): Promise<Book | undefined>;
   findBooksByIds(ids: string[]): Promise<Book[]>;
+  findBookByIdentifier(identifier: string): Promise<Book | undefined>;
   list(): Promise<Book[]>;
   listWithPagination(page: number, sort?: string): Promise<IPaginationData>;
   update(Book: Book, data: IUpdateBookDTO): Promise<void>;

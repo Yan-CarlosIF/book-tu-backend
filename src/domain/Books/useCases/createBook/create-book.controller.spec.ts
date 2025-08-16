@@ -43,6 +43,7 @@ describe("[POST] /books", () => {
       })
       .send({
         title: "Book 1",
+        identifier: "123131",
         author: "Author 1",
         release_year: 2000,
         price: 10,
@@ -81,6 +82,7 @@ describe("[POST] /books", () => {
       })
       .send({
         title: "Book 1",
+        identifier: "12314",
         author: "Author 1",
         release_year: 2000,
         price: 10,
@@ -116,6 +118,7 @@ describe("[POST] /books", () => {
       })
       .send({
         title: "Book 1",
+        identifier: "123",
         author: "Author 1",
         release_year: 2000,
         price: 10,
@@ -141,5 +144,34 @@ describe("[POST] /books", () => {
 
     expect(response.status).toBe(401);
     expect(response.body.message).toBe("Token not found");
+  });
+
+  it("should not be able to create a new book if identifier is already in use", async () => {
+    const responseAuth = await request(app).post("/auth/session").send({
+      login: "user-test",
+      password: "123",
+    });
+
+    const { token } = responseAuth.body;
+
+    const response = await request(app)
+      .post("/books")
+      .set({
+        Authorization: `Bearer ${token}`,
+      })
+      .send({
+        title: "Book 1",
+        identifier: "123131",
+        author: "Author 1",
+        release_year: 2000,
+        price: 10,
+        description: "Description 1",
+        categoryIds: [],
+      });
+
+    expect(response.status).toBe(409);
+    expect(response.body.message).toBe(
+      "Livro com o mesmo identificador já cadastrado"
+    );
   });
 });

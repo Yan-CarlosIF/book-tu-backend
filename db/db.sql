@@ -10,6 +10,7 @@ CREATE TABLE "Users" (
 
 CREATE TABLE "Books" (
   "id" uuid PRIMARY KEY,
+  "identifier" varchar UNIQUE NOT NULL,
   "title" varchar UNIQUE NOT NULL,
   "author" varchar NOT NULL,
   "release_year" int NOT NULL,

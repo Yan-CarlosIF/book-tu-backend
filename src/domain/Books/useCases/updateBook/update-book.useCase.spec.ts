@@ -23,6 +23,7 @@ describe("[PATCH] /books/:id", () => {
   it("should be able to update a book", async () => {
     await booksRepository.create({
       title: "Book 1",
+      identifier: "123",
       author: "Author 1",
       release_year: 2000,
       price: 10,
@@ -32,6 +33,7 @@ describe("[PATCH] /books/:id", () => {
 
     await updateBookUseCase.execute(booksRepository.books[0].id, {
       title: "Book 2",
+      identifier: "123",
       author: "Author 2",
       release_year: 2001,
       price: 20,
@@ -41,6 +43,7 @@ describe("[PATCH] /books/:id", () => {
     expect(booksRepository.books[0]).toEqual({
       id: expect.any(String),
       title: "Book 2",
+      identifier: "123",
       author: "Author 2",
       release_year: 2001,
       price: 20,
@@ -53,6 +56,7 @@ describe("[PATCH] /books/:id", () => {
     await expect(
       updateBookUseCase.execute(v4(), {
         title: "Book 2",
+        identifier: "123",
         author: "Author 2",
         release_year: 2001,
         price: 20,
@@ -64,6 +68,7 @@ describe("[PATCH] /books/:id", () => {
   it("should not be able to update a book with a category if the category does not exist", async () => {
     await booksRepository.create({
       title: "Book 1",
+      identifier: "123",
       author: "Author 1",
       release_year: 2000,
       price: 10,

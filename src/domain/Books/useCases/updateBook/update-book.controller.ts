@@ -10,6 +10,7 @@ const updateBookParamsSchema = z.object({
 
 const updateBookBodySchema = z.object({
   title: z.string().optional(),
+  identifier: z.string().optional(),
   author: z.string().optional(),
   release_year: z.number().optional(),
   price: z.number().optional(),
@@ -25,14 +26,22 @@ export class UpdateBookController {
     response: Response
   ) {
     const { id } = updateBookParamsSchema.parse(request.params);
-    
-    const { author, categoryIds, description, price, release_year, title } =
-      updateBookBodySchema.parse(request.body);
+
+    const {
+      author,
+      identifier,
+      categoryIds,
+      description,
+      price,
+      release_year,
+      title,
+    } = updateBookBodySchema.parse(request.body);
 
     const updateBookUseCase = container.resolve(UpdateBookUseCase);
 
     await updateBookUseCase.execute(id, {
       author,
+      identifier,
       categoryIds,
       description,
       price,

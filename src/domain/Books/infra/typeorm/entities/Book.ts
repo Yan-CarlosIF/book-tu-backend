@@ -8,6 +8,9 @@ export class Book {
   @PrimaryColumn("uuid")
   id: string;
 
+  @Column("varchar", { unique: true })
+  identifier: string;
+
   @Column("varchar")
   title: string;
 

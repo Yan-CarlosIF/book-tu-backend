@@ -28,6 +28,12 @@ export class BooksRepository implements IBooksRepository {
     });
   }
 
+  async findBookByIdentifier(identifier: string): Promise<Book | undefined> {
+    return await this.repository.findOne({
+      where: { identifier },
+    });
+  }
+
   async list(): Promise<Book[]> {
     return await this.repository.find({ relations: ["categories"] });
   }
