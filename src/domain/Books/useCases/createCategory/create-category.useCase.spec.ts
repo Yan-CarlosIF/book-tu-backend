@@ -24,7 +24,7 @@ describe("[POST] /categories", () => {
     await createCategoryUseCase.execute("Category 1");
 
     await expect(createCategoryUseCase.execute("Category 1")).rejects.toEqual(
-      new AppError("Category already exists", 400)
+      new AppError("Categoria já cadastrada", 400)
     );
   });
 });

@@ -92,7 +92,7 @@ describe("[DELETE] /establishments/:id", () => {
     );
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
     expect(establishments.length).toBe(1);
   });
 

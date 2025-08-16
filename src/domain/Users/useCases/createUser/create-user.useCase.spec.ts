@@ -47,7 +47,9 @@ describe("[POST] /users", () => {
         registration: "153252fs",
         role: "user",
       })
-    ).rejects.toEqual(new AppError("User already exists", 409));
+    ).rejects.toEqual(
+      new AppError("Usuário já cadastrado com esse login", 409)
+    );
   });
 
   it("should not be able to create a new user with same registration", async () => {
@@ -69,6 +71,8 @@ describe("[POST] /users", () => {
         registration: "153252fs",
         role: "user",
       })
-    ).rejects.toEqual(new AppError("Registration already exists", 409));
+    ).rejects.toEqual(
+      new AppError("Usuário já cadastrado com essa matricula", 409)
+    );
   });
 });

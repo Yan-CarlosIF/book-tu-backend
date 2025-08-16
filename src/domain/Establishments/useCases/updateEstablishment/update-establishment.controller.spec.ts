@@ -91,7 +91,7 @@ describe("[PATCH] /establishments/:id", () => {
       name: "Estabelecimento Teste Atualizado",
     });
 
-    expect(response.body.message).toEqual("Token not found");
+    expect(response.body.message).toEqual("Usuário não autenticado");
     expect(response.status).toBe(401);
   });
 

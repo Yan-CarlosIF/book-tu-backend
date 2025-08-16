@@ -21,7 +21,7 @@ export class CreateBookUseCase {
     );
 
     if (categories.length !== data.categoryIds.length) {
-      throw new AppError("One or more categories not found", 404);
+      throw new AppError("Uma ou mais categorias não foram encontradas", 404);
     }
 
     const book = await this.booksRepository.findBookByIdentifier(

@@ -68,6 +68,6 @@ describe("[GET] /establishments/all", () => {
     const response = await request(app).get("/establishments/all");
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 });

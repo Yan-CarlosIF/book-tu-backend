@@ -80,14 +80,16 @@ describe("[DELETE] /categories/:id", () => {
       });
 
     expect(response.status).toBe(404);
-    expect(response.body.message).toBe("Category not found");
+    expect(response.body.message.normalize("NFC")).toBe(
+      "Categoria não encontrada".normalize("NFC")
+    );
   });
 
   it("should not be able to delete a category without authentication", async () => {
     const response = await request(app).delete(`/categories/${v4()}`);
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should not be able to delete a category if user is not admin", async () => {
@@ -136,6 +138,6 @@ describe("[DELETE] /categories/:id", () => {
       });
 
     expect(response.status).toBe(403);
-    expect(response.body.message).toBe("User does not have permission");
+    expect(response.body.message).toBe("Usuário não tem permissão de admin");
   });
 });

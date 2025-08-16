@@ -38,6 +38,7 @@ describe("[GET] /books", () => {
         })
         .send({
           title: `Random book ${i + 1}`,
+          identifier: `123${i + 1}`,
           author: `Random author ${i + 1}`,
           publisher: `Random publisher ${i + 1}`,
           release_year: 2000 + i,

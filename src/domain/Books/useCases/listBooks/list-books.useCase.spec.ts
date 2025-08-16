@@ -12,6 +12,7 @@ describe("[GET] /books/all", () => {
     for (let i = 0; i < 10; i++) {
       booksRepository.create({
         title: `Book ${i + 1}`,
+        identifier: `12314${i + 1}`,
         author: "Author 1",
         release_year: 2000,
         price: 10,

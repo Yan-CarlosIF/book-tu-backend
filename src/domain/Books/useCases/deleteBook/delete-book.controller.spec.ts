@@ -44,6 +44,7 @@ describe("[DELETE] /books/:id", () => {
       })
       .send({
         title: "Random book",
+        identifier: "12314",
         author: "Random author",
         release_year: 2000,
         price: 10,
@@ -86,14 +87,16 @@ describe("[DELETE] /books/:id", () => {
       });
 
     expect(response.status).toBe(404);
-    expect(response.body.message).toBe("Book not found");
+    expect(response.body.message.normalize("NFC")).toBe(
+      "Livro não encontrado".normalize("NFC")
+    );
   });
 
   it("should not be able to delete a book without authentication", async () => {
     const response = await request(app).delete(`/books/${v4()}`);
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should not be able to delete a book if user is not admin", async () => {
@@ -125,6 +128,7 @@ describe("[DELETE] /books/:id", () => {
       })
       .send({
         title: "Random book",
+        identifier: "12314",
         author: "Random author",
         release_year: 2000,
         price: 10,
@@ -148,6 +152,6 @@ describe("[DELETE] /books/:id", () => {
       });
 
     expect(response.status).toBe(403);
-    expect(response.body.message).toBe("User does not have permission");
+    expect(response.body.message).toBe("Usuário não tem permissão de admin");
   });
 });

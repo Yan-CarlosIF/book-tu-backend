@@ -36,6 +36,7 @@ describe("[GET] /books/all", () => {
         .set({ Authorization: `Bearer ${token}` })
         .send({
           title: `Random book ${i + 1}`,
+          identifier: `123${i + 1}`,
           author: `Random author ${i + 1}`,
           publisher: `Random publisher ${i + 1}`,
           release_year: 2000 + i,
@@ -65,6 +66,6 @@ describe("[GET] /books/all", () => {
   it("should not be able to list all books without authentication", async () => {
     const response = await request(app).get("/books/all");
 
-    expect(response.body.message).toEqual("Token not found");
+    expect(response.body.message).toEqual("Usuário não autenticado");
   });
 });

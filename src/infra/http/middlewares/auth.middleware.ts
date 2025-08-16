@@ -16,7 +16,7 @@ export async function authMiddleware(
   const { authorization } = request.headers;
 
   if (!authorization) {
-    throw new AppError("Token not found", 401);
+    throw new AppError("Usuário não autenticado", 401);
   }
 
   const [, token] = authorization.split(" ");
@@ -28,6 +28,6 @@ export async function authMiddleware(
 
     return next();
   } catch {
-    throw new AppError("Invalid token", 401);
+    throw new AppError("Token inválido", 401);
   }
 }

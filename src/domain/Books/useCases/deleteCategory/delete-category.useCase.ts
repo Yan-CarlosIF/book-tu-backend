@@ -15,7 +15,7 @@ export class DeleteCategoryUseCase {
     const category = await this.categoriesRepository.findById(id);
 
     if (!category) {
-      throw new AppError("Category not found", 404);
+      throw new AppError("Categoria não encontrada", 404);
     }
 
     await this.categoriesRepository.delete(category);

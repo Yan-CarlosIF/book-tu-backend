@@ -57,6 +57,6 @@ describe("[GET] /categories/all", () => {
   it("should not be able to list all categories without authentication", async () => {
     const response = await request(app).get("/categories/all");
 
-    expect(response.body.message).toEqual("Token not found");
+    expect(response.body.message).toEqual("Usuário não autenticado");
   });
 });

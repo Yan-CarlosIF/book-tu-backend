@@ -25,7 +25,7 @@ describe("[PATCH] /categories/:id", () => {
   it("should not be able to update a category that does not exist", async () => {
     await expect(
       updateCategoryUseCase.execute("invalid-id", "Category 2")
-    ).rejects.toEqual(new AppError("Category not found", 404));
+    ).rejects.toEqual(new AppError("Categoria não encontrada", 404));
   });
 
   it("should not be able to update a category with the same name", async () => {
@@ -36,12 +36,12 @@ describe("[PATCH] /categories/:id", () => {
 
     await expect(
       updateCategoryUseCase.execute(id, "Category 1")
-    ).rejects.toEqual(new AppError("Category already exists", 400));
+    ).rejects.toEqual(new AppError("Categoria já cadastrada", 400));
   });
 
   it("should not be able to update a non-existent category", async () => {
     await expect(
       updateCategoryUseCase.execute("invalid-id", "Category 2")
-    ).rejects.toEqual(new AppError("Category not found", 404));
+    ).rejects.toEqual(new AppError("Categoria não encontrada", 404));
   });
 });

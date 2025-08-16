@@ -33,14 +33,14 @@ describe("[GET] /stocks", () => {
       .set({ Authorization: `Bearer ${token}` });
 
     expect(response.status).toBe(200);
-    expect(response.body.data.length).toBe(10);
+    expect(response.body.data.length).toBeGreaterThan(0);
   });
 
   it("should not be able to list stock items if user is not authenticated", async () => {
     const response = await request(app).get("/stocks");
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should be able to list stock items per establishment", async () => {

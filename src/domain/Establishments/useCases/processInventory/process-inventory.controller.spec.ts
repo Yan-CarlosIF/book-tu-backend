@@ -69,7 +69,7 @@ describe("[POST] /inventories/process/:id", () => {
     );
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should not be able to process inventory if inventory does not exists", async () => {
@@ -98,7 +98,7 @@ describe("[POST] /inventories/process/:id", () => {
       .set({ Authorization: `Bearer ${tokenOperator}` });
 
     expect(response.status).toBe(403);
-    expect(response.body.message).toBe("User does not have permission");
+    expect(response.body.message).toBe("Usuário não tem permissão de admin");
   });
 
   it("should not be able to process a inventory if inventory is already processed", async () => {

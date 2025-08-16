@@ -54,7 +54,7 @@ describe("[DELETE] /inventories/:id", () => {
     const response = await request(app).delete(`/inventories/${inventory.id}`);
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should not be able to delete inventory if inventory does not exist", async () => {

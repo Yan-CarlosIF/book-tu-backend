@@ -91,7 +91,7 @@ describe("[POST] /users", () => {
       });
 
     expect(response.status).toBe(403);
-    expect(response.body.message).toBe("User does not have permission");
+    expect(response.body.message).toBe("Usuário não tem permissão de admin");
   });
 
   it("should not be able to create a new user with same login", async () => {
@@ -115,7 +115,9 @@ describe("[POST] /users", () => {
       });
 
     expect(response.status).toBe(409);
-    expect(response.body.message).toBe("User already exists");
+    expect(response.body.message.normalize("NFC")).toBe(
+      "Usuário já cadastrado com esse login".normalize("NFC")
+    );
   });
 
   it("should not be able to create a new user with same registration", async () => {
@@ -139,7 +141,9 @@ describe("[POST] /users", () => {
       });
 
     expect(response.status).toBe(409);
-    expect(response.body.message).toBe("Registration already exists");
+    expect(response.body.message.normalize("NFC")).toBe(
+      "Usuário já cadastrado com essa matricula".normalize("NFC")
+    );
   });
 
   it("should not be able to create a new user if not authenticated", async () => {
@@ -155,7 +159,7 @@ describe("[POST] /users", () => {
       });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should not be able to create a new user if token invalid", async () => {
@@ -172,6 +176,6 @@ describe("[POST] /users", () => {
       });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Invalid token");
+    expect(response.body.message).toBe("Token inválido");
   });
 });

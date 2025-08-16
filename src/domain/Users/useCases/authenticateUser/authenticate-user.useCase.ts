@@ -19,13 +19,13 @@ export class AuthenticateUserUseCase {
     const user = await this.usersRepository.findByLogin(login);
 
     if (!user) {
-      throw new AppError("User not found", 404);
+      throw new AppError("Credenciais incorretas", 401);
     }
 
     const passwordMatch = await compare(password, user.password);
 
     if (!passwordMatch) {
-      throw new AppError("Incorrect password", 401);
+      throw new AppError("Credenciais incorretas", 401);
     }
 
     const token = sign({}, env.SECRET_TOKEN, {

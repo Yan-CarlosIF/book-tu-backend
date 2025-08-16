@@ -82,7 +82,7 @@ describe("[PATCH] /users/:id", () => {
       });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Invalid token");
+    expect(response.body.message).toBe("Token inválido");
   });
 
   it("should not be able to edit user data if authenticated user is not admin", async () => {
@@ -122,7 +122,7 @@ describe("[PATCH] /users/:id", () => {
       });
 
     expect(response.status).toBe(403);
-    expect(response.body.message).toBe("User does not have permission");
+    expect(response.body.message).toBe("Usuário não tem permissão de admin");
   });
 
   it("should not be able to edit user data if user does not exist", async () => {
@@ -143,6 +143,6 @@ describe("[PATCH] /users/:id", () => {
       });
 
     expect(response.status).toBe(404);
-    expect(response.body.message).toBe("User not found");
+    expect(response.body.message).toBe("Usuário não encontrado");
   });
 });

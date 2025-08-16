@@ -48,7 +48,7 @@ describe("[GET] /inventories/:id", () => {
     const response = await request(app).get(`/inventories/${inventory.id}`);
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should not be able to get an inventory with invalid id", async () => {

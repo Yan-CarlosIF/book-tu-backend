@@ -53,7 +53,7 @@ describe("[GET] /users", () => {
     const response = await request(app).get("/users");
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should not be able to list all users if token invalid", async () => {
@@ -62,7 +62,7 @@ describe("[GET] /users", () => {
       .set({ Authorization: `Bearer invalid-token` });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Invalid token");
+    expect(response.body.message).toBe("Token inválido");
   });
 
   it("should not be able to list all users if authenticated user is not admin", async () => {
@@ -78,6 +78,6 @@ describe("[GET] /users", () => {
       .set({ Authorization: `Bearer ${token}` });
 
     expect(response.status).toBe(403);
-    expect(response.body.message).toBe("User does not have permission");
+    expect(response.body.message).toBe("Usuário não tem permissão de admin");
   });
 });

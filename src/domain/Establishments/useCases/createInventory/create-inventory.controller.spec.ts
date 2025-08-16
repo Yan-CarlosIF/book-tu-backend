@@ -39,10 +39,28 @@ describe("[POST] /inventories", () => {
       .send({
         establishment_id: establishmentId,
         total_quantity: 5 * booksIds.length,
-        inventoryBooks: booksIds.map((book: { id: string }) => ({
-          book_id: book.id,
-          quantity: 5,
-        })),
+        inventoryBooks: [
+          {
+            book_id: booksIds[0].id,
+            quantity: 5,
+          },
+          {
+            book_id: booksIds[1].id,
+            quantity: 5,
+          },
+          {
+            book_id: booksIds[2].id,
+            quantity: 5,
+          },
+          {
+            book_id: booksIds[3].id,
+            quantity: 5,
+          },
+          {
+            book_id: booksIds[4].id,
+            quantity: 5,
+          },
+        ],
       })
       .set({ Authorization: `Bearer ${token}` });
 
@@ -82,7 +100,7 @@ describe("[POST] /inventories", () => {
       });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should not be able to create a new inventory if establishment does not exist", async () => {

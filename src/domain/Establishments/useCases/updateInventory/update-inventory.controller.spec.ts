@@ -73,7 +73,7 @@ describe("[PUT] /inventories/:id", () => {
       });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should not be able to update a inventory if inventory does not exist", async () => {

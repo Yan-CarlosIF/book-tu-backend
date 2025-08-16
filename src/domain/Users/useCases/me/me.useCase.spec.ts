@@ -33,7 +33,7 @@ describe("[GET] /users/me", () => {
 
   it("should not be able to get the authenticated user if not authenticated", async () => {
     await expect(meUseCase.execute("invalid-id")).rejects.toEqual(
-      new AppError("Unauthorized", 401)
+      new AppError("Não autorizado", 401)
     );
   });
 });

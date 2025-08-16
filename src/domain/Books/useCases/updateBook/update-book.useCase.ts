@@ -30,7 +30,7 @@ export class UpdateBookUseCase {
     const bookExists = await this.booksRepository.findBookById(id);
 
     if (!bookExists) {
-      throw new AppError("Book not found", 404);
+      throw new AppError("Livro não encontrado", 404);
     }
 
     let categories = bookExists.categories;
@@ -39,7 +39,7 @@ export class UpdateBookUseCase {
       categories = await this.categoriesRepository.findByIds(categoryIds);
 
       if (categories.length !== categoryIds.length) {
-        throw new AppError("One or more categories not found", 404);
+        throw new AppError("Uma ou mais categorias não foram encontradas", 404);
       }
     }
 

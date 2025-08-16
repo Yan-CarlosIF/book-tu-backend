@@ -67,7 +67,9 @@ describe("[POST] /books", () => {
         description: "Description 1",
         categoryIds: [v4()],
       })
-    ).rejects.toEqual(new AppError("One or more categories not found", 404));
+    ).rejects.toEqual(
+      new AppError("Uma ou mais categorias não foram encontradas", 404)
+    );
   });
 
   it("should not be able to create a new book if identifier is already in use", async () => {

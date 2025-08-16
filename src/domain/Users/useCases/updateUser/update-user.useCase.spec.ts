@@ -57,6 +57,6 @@ describe("[PATCH] /users/:id", () => {
         permission: Permission.ADMIN,
         role: "chief",
       })
-    ).rejects.toEqual(new AppError("User not found", 404));
+    ).rejects.toEqual(new AppError("Usuário não encontrado", 404));
   });
 });

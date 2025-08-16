@@ -62,7 +62,7 @@ describe("[PATCH] /books/:id", () => {
         price: 20,
         description: "Description 2",
       })
-    ).rejects.toEqual(new AppError("Book not found", 404));
+    ).rejects.toEqual(new AppError("Livro não encontrado", 404));
   });
 
   it("should not be able to update a book with a category if the category does not exist", async () => {
@@ -85,6 +85,8 @@ describe("[PATCH] /books/:id", () => {
         description: "Description 2",
         categoryIds: [v4()],
       })
-    ).rejects.toEqual(new AppError("One or more categories not found", 404));
+    ).rejects.toEqual(
+      new AppError("Uma ou mais categorias não foram encontradas", 404)
+    );
   });
 });

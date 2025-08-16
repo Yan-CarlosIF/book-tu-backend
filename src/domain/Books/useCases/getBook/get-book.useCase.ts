@@ -15,7 +15,7 @@ export class GetBookUseCase {
     const book = await this.booksRepository.findBookById(id);
 
     if (!book) {
-      throw new AppError("Book not found", 404);
+      throw new AppError("Livro não encontrado", 404);
     }
 
     return book;

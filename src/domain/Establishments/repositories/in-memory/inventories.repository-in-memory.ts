@@ -69,6 +69,7 @@ export class InventoriesRepositoryInMemory implements IInventoriesRepository {
         book: {
           id: book.book_id,
           title: "",
+          identifier: "",
           author: "",
           release_year: 0,
           price: 0,

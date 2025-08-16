@@ -18,14 +18,14 @@ export class CreateUserUseCase {
     );
 
     if (userWithSameLogin) {
-      throw new AppError("User already exists", 409);
+      throw new AppError("Usuário já cadastrado com esse login", 409);
     }
 
     const userWithSameRegistration =
       await this.usersRepository.findByRegistration(data.registration);
 
     if (userWithSameRegistration) {
-      throw new AppError("Registration already exists", 409);
+      throw new AppError("Usuário já cadastrado com essa matricula", 409);
     }
 
     await this.usersRepository.create(data);

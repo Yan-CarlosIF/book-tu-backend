@@ -17,7 +17,7 @@ export class DeleteUserController {
     const { id: userId } = deleteUserParamsSchema.parse(request.params);
 
     if (id === userId) {
-      throw new AppError("You cannot delete yourself", 400);
+      throw new AppError("Você não pode deletar sua própria conta", 400);
     }
 
     const deleteUserUseCase = container.resolve(DeleteUserUseCase);

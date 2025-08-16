@@ -89,6 +89,6 @@ describe("[GET] /categories", () => {
     const response = await request(app).get("/categories");
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 });

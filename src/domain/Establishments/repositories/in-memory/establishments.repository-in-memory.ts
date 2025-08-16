@@ -56,7 +56,7 @@ export class EstablishmentsRepositoryInMemory
     );
 
     if (!establishment) {
-      throw new AppError("Establishment not found");
+      throw new AppError("Estabelecimento não encontrado", 404);
     }
 
     Object.assign(establishment, data);
@@ -68,7 +68,7 @@ export class EstablishmentsRepositoryInMemory
     );
 
     if (!establishment) {
-      throw new AppError("Establishment not found");
+      throw new AppError("Estabelecimento não encontrado", 404);
     }
 
     this.establishments = this.establishments.filter(

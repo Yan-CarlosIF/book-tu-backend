@@ -9,7 +9,7 @@ export async function ensureUserAdmin(
   next: NextFunction
 ) {
   if (!request.user) {
-    throw new AppError("User not found", 401);
+    throw new AppError("Usuário não encontrado", 401);
   }
 
   const usersRepository = new UsersRepository();
@@ -17,12 +17,12 @@ export async function ensureUserAdmin(
   const user = await usersRepository.findById(request.user.id);
 
   if (!user) {
-    throw new AppError("User not found", 401);
+    throw new AppError("Usuário não encontrado", 401);
   }
 
   if (user.permission === "admin") {
     return next();
   }
 
-  throw new AppError("User does not have permission", 403);
+  throw new AppError("Usuário não tem permissão de admin", 403);
 }

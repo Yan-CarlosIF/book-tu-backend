@@ -17,6 +17,7 @@ describe("[DELETE] /books/:id", () => {
   it("should be able to delete a book", async () => {
     await booksRepository.create({
       title: "Book 1",
+      identifier: "12314",
       author: "Author 1",
       release_year: 2000,
       price: 10,
@@ -31,7 +32,7 @@ describe("[DELETE] /books/:id", () => {
 
   it("should not be able to delete a book if the book does not exist", async () => {
     await expect(deleteBookUseCase.execute(v4())).rejects.toEqual(
-      new AppError("Book not found", 404)
+      new AppError("Livro não encontrado", 404)
     );
   });
 });

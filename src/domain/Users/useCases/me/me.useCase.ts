@@ -15,7 +15,7 @@ export class MeUseCase {
     const user = await this.usersRepository.findById(userId);
 
     if (!user) {
-      throw new AppError("Unauthorized", 401);
+      throw new AppError("Não autorizado", 401);
     }
 
     return user;

@@ -113,7 +113,9 @@ describe("[PATCH] /books/:id", () => {
       });
 
     expect(response.status).toBe(404);
-    expect(response.body.message).toBe("Book not found");
+    expect(response.body.message.normalize("NFC")).toBe(
+      "Livro não encontrado".normalize("NFC")
+    );
   });
 
   it("should not be able to update a book if the category does not exist", async () => {
@@ -149,7 +151,9 @@ describe("[PATCH] /books/:id", () => {
       });
 
     expect(response.status).toBe(404);
-    expect(response.body.message).toBe("One or more categories not found");
+    expect(response.body.message).toBe(
+      "Uma ou mais categorias não foram encontradas"
+    );
   });
 
   it("should not be able to update a book if not authenticated", async () => {
@@ -179,7 +183,7 @@ describe("[PATCH] /books/:id", () => {
     });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should not be able to update a book if identifier is already in use", async () => {

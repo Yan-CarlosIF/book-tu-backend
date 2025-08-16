@@ -22,6 +22,7 @@ describe("[PUT] /inventories/:id", () => {
   it("should be able to update a inventory", async () => {
     await booksRepository.create({
       title: "Book 1",
+      identifier: "12314",
       author: "Author 1",
       release_year: 2000,
       price: 10,
@@ -97,6 +98,7 @@ describe("[PUT] /inventories/:id", () => {
   it("should not be able to update a processed inventory", async () => {
     await booksRepository.create({
       title: "Book 1",
+      identifier: "12314",
       author: "Author 1",
       release_year: 2000,
       price: 10,

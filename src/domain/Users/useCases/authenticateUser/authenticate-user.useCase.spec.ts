@@ -46,7 +46,7 @@ describe("[POST] /auth/session", () => {
         login: "user-test",
         password: "123",
       })
-    ).rejects.toEqual(new AppError("User not found", 404));
+    ).rejects.toEqual(new AppError("Credenciais incorretas", 401));
   });
 
   it("should not be able to authenticate with incorrect password", async () => {
@@ -64,6 +64,6 @@ describe("[POST] /auth/session", () => {
         login: "user-test",
         password: "1234",
       })
-    ).rejects.toEqual(new AppError("Incorrect password", 401));
+    ).rejects.toEqual(new AppError("Credenciais incorretas", 401));
   });
 });

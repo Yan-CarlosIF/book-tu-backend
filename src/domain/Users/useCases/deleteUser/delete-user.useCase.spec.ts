@@ -32,7 +32,7 @@ describe("[DELETE] /users/:id", () => {
 
   it("should not be able to delete a user that does not exist", async () => {
     await expect(deleteUserUseCase.execute(v4())).rejects.toEqual(
-      new AppError("User not found", 404)
+      new AppError("Usuário não encontrado", 404)
     );
   });
 });

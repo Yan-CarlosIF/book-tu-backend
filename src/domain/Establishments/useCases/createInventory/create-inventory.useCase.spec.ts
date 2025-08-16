@@ -36,6 +36,7 @@ describe("[POST] /inventories", () => {
 
     await booksRepository.create({
       title: "Book 1",
+      identifier: "12314",
       author: "Author 1",
       release_year: 2000,
       price: 10,
@@ -45,6 +46,7 @@ describe("[POST] /inventories", () => {
 
     await booksRepository.create({
       title: "Book 2",
+      identifier: "12315",
       author: "Author 2",
       release_year: 2000,
       price: 10,

@@ -17,6 +17,7 @@ describe("[GET] /books/:id", () => {
   it("should be able to get a book information by id", async () => {
     await booksRepository.create({
       title: "Book 1",
+      identifier: "12314",
       author: "Author 1",
       release_year: 2000,
       price: 10,
@@ -32,7 +33,7 @@ describe("[GET] /books/:id", () => {
 
   it("should not be able do get a book that does not exists", async () => {
     await expect(getBookUseCase.execute(v4())).rejects.toEqual(
-      new AppError("Book not found", 404)
+      new AppError("Livro não encontrado", 404)
     );
   });
 });

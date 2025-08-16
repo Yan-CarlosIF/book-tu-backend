@@ -42,6 +42,7 @@ describe("[GET] /books/:id", () => {
       .set({ Authorization: `Bearer ${token}` })
       .send({
         title: "Book 1",
+        identifier: "12314",
         author: "Author 1",
         description: "Description 1",
         categoryIds: [],
@@ -72,13 +73,15 @@ describe("[GET] /books/:id", () => {
       });
 
     expect(response.status).toBe(404);
-    expect(response.body.message).toBe("Book not found");
+    expect(response.body.message.normalize("NFC")).toBe(
+      "Livro não encontrado".normalize("NFC")
+    );
   });
 
   it("should not be able to get a book if not authenticated", async () => {
     const response = await request(app).get(`/books/${v4()}`);
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 });

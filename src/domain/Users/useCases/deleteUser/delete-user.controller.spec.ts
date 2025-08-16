@@ -87,14 +87,14 @@ describe("[DELETE] /users/:id", () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe("You cannot delete yourself");
+    expect(response.body.message).toBe("Você não pode deletar sua própria conta");
   });
 
   it("should not be able to delete a user if not authenticated", async () => {
     const response = await request(app).delete(`/users/${v4()}`);
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should not be able to delete a user if token invalid", async () => {
@@ -103,7 +103,7 @@ describe("[DELETE] /users/:id", () => {
       .set({ Authorization: `Bearer invalid-token` });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Invalid token");
+    expect(response.body.message).toBe("Token inválido");
   });
 
   it("should not be able to delete a user if authenticated user is not admin", async () => {
@@ -140,6 +140,6 @@ describe("[DELETE] /users/:id", () => {
       .set({ Authorization: `Bearer ${tokenOperator}` });
 
     expect(response.status).toBe(403);
-    expect(response.body.message).toBe("User does not have permission");
+    expect(response.body.message).toBe("Usuário não tem permissão de admin");
   });
 });

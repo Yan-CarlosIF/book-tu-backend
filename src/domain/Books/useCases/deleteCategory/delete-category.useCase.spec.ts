@@ -24,7 +24,7 @@ describe("[DELETE] /categories/:id", () => {
 
   it("should not be able to delete a category that does not exist", async () => {
     await expect(deleteCategoryUseCase.execute("invalid-id")).rejects.toEqual(
-      new AppError("Category not found", 404)
+      new AppError("Categoria não encontrada", 404)
     );
   });
 });

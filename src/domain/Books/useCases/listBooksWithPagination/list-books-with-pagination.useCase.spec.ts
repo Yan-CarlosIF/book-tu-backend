@@ -15,6 +15,7 @@ describe("[GET] /books", () => {
   it("should be able to list all books", async () => {
     await booksRepository.create({
       title: "Book 1",
+      identifier: "12314",
       author: "Author 1",
       release_year: 2000,
       price: 10,
@@ -24,6 +25,7 @@ describe("[GET] /books", () => {
 
     await booksRepository.create({
       title: "Book 2",
+      identifier: "123145",
       author: "Author 2",
       release_year: 2001,
       price: 20,
@@ -43,6 +45,7 @@ describe("[GET] /books", () => {
     for (let i = 0; i < 20; i++) {
       await booksRepository.create({
         title: `Book ${i + 1}`,
+        identifier: `12314${i + 1}`,
         author: "Author 1",
         release_year: 2000,
         price: 10,
@@ -61,6 +64,7 @@ describe("[GET] /books", () => {
   it("should be able to list all books with filters", async () => {
     await booksRepository.create({
       title: "Book 1",
+      identifier: "12315",
       author: "Author 1",
       release_year: 2000,
       price: 10,
@@ -70,6 +74,7 @@ describe("[GET] /books", () => {
 
     await booksRepository.create({
       title: "Book 2",
+      identifier: "123161",
       author: "Author 2",
       release_year: 2001,
       price: 20,

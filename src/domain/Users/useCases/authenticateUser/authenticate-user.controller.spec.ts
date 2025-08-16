@@ -43,8 +43,8 @@ describe("[POST] /auth/session", () => {
       password: "123",
     });
 
-    expect(response.status).toBe(404);
-    expect(response.body.message).toBe("User not found");
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe("Credenciais incorretas");
   });
 
   it("should not be able to authenticate a user with wrong password", async () => {
@@ -54,6 +54,6 @@ describe("[POST] /auth/session", () => {
     });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Incorrect password");
+    expect(response.body.message).toBe("Credenciais incorretas");
   });
 });

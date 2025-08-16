@@ -127,7 +127,7 @@ describe("[POST] /books", () => {
       });
 
     expect(response.status).toBe(404);
-    expect(response.body.message).toBe("One or more categories not found");
+    expect(response.body.message).toBe("Uma ou mais categorias não foram encontradas");
   });
 
   it("should not be able to create a new book with a category without authentication", async () => {
@@ -143,7 +143,7 @@ describe("[POST] /books", () => {
       });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should not be able to create a new book if identifier is already in use", async () => {

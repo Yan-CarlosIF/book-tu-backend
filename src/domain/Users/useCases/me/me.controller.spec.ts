@@ -53,6 +53,6 @@ describe("[GET] /me", () => {
     const response = await request(app).get("/users/me");
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 });

@@ -74,7 +74,7 @@ describe("[POST] /establishments", () => {
       .post("/establishments")
       .send(establishmentExample);
 
-    expect(response.body.message).toEqual("Token not found");
+    expect(response.body.message).toEqual("Usuário não autenticado");
     expect(response.status).toBe(401);
   });
 

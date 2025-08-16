@@ -91,7 +91,7 @@ describe("[PATCH] /categories/:id", () => {
       });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Token not found");
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 
   it("should not be able to update a category if the category does not exist", async () => {
@@ -105,7 +105,9 @@ describe("[PATCH] /categories/:id", () => {
       });
 
     expect(response.status).toBe(404);
-    expect(response.body.message).toBe("Category not found");
+    expect(response.body.message.normalize("NFC")).toBe(
+      "Categoria não encontrada".normalize("NFC")
+    );
   });
 
   it("should not be able to update a category with a name that already exists", async () => {
@@ -136,6 +138,8 @@ describe("[PATCH] /categories/:id", () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe("Category already exists");
+    expect(response.body.message.normalize("NFC")).toBe(
+      "Categoria já cadastrada".normalize("NFC")
+    );
   });
 });
