@@ -7,7 +7,11 @@ export interface ICategoriesRepository {
   findByIds(ids: string[]): Promise<Category[]>;
   findById(id: string): Promise<Category | undefined>;
   list(): Promise<Category[]>;
-  listWithPagination(page: number, sort?: string): Promise<IPaginationData>;
+  listWithPagination(
+    page: number,
+    sort?: string,
+    search?: string
+  ): Promise<IPaginationData>;
   update(category: Category, name: string): Promise<void>;
   delete(category: Category): Promise<void>;
 }

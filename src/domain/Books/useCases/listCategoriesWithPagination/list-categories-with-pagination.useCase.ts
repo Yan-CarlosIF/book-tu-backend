@@ -10,13 +10,13 @@ export class ListCategoriesWithPaginationUseCase {
     private categoriesRepository: ICategoriesRepository
   ) {}
 
-  async execute(page?: number, sort?: string) {
+  async execute(page?: number, sort?: string, search?: string) {
     if (!page || page < 1) {
       page = 1;
     }
 
     const paginatedCategories =
-      await this.categoriesRepository.listWithPagination(page, sort);
+      await this.categoriesRepository.listWithPagination(page, sort, search);
 
     return {
       categories: paginatedCategories.data as Category[],

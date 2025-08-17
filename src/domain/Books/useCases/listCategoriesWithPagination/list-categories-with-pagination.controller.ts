@@ -7,6 +7,7 @@ import { ListCategoriesWithPaginationUseCase } from "./list-categories-with-pagi
 const queryParamsSchema = z.object({
   sort: z.enum(["asc", "desc"]).optional(),
   page: z.coerce.number().optional(),
+  search: z.string().optional(),
 });
 
 type IQueryParams = z.infer<typeof queryParamsSchema>;
@@ -16,14 +17,14 @@ export class ListCategoriesWithPaginationController {
     request: Request<unknown, unknown, unknown, IQueryParams>,
     response: Response
   ) {
-    const { page, sort } = queryParamsSchema.parse(request.query);
+    const { page, sort, search } = queryParamsSchema.parse(request.query);
 
     const listCategoriesWithPaginationUseCase = container.resolve(
       ListCategoriesWithPaginationUseCase
     );
 
     const paginatedCategories =
-      await listCategoriesWithPaginationUseCase.execute(page, sort);
+      await listCategoriesWithPaginationUseCase.execute(page, sort, search);
 
     return response.status(200).json(paginatedCategories);
   }

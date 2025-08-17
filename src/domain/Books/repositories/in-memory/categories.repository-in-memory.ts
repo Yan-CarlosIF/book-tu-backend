@@ -47,7 +47,8 @@ export class CategoriesRepositoryInMemory implements ICategoriesRepository {
 
   async listWithPagination(
     page: number,
-    sort?: string
+    sort?: string,
+    search?: string
   ): Promise<IPaginationData> {
     const lastPage = Math.ceil(this.categories.length / 10);
 
@@ -56,6 +57,12 @@ export class CategoriesRepositoryInMemory implements ICategoriesRepository {
     }
 
     let categories = this.categories;
+
+    if (search) {
+      categories = this.categories.filter((category) =>
+        category.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
 
     switch (sort) {
       case "asc":

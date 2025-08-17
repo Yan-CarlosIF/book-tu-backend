@@ -85,6 +85,26 @@ describe("[GET] /categories", () => {
     );
   });
 
+  it("should be able to filter categories by name", async () => {
+    const { body } = await request(app)
+      .get("/categories")
+      .set({
+        Authorization: `Bearer ${token}`,
+      })
+      .query({ search: "Category 10" });
+
+    const { total, categories } = body;
+
+    expect(total).toBe(1);
+    expect(categories.length).toBe(1);
+    expect(categories).toEqual([
+      {
+        id: expect.any(String),
+        name: "Category 10",
+      },
+    ]);
+  });
+
   it("should not be able to list all categories if user is not authenticated", async () => {
     const response = await request(app).get("/categories");
 
