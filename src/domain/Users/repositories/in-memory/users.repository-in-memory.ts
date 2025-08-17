@@ -41,8 +41,20 @@ export class UsersRepositoryInMemory implements IUsersRepository {
     return user;
   }
 
-  async list(page: number, sort?: string): Promise<IUsersPaginationData> {
+  async list(
+    page: number,
+    sort?: string,
+    search?: string
+  ): Promise<IUsersPaginationData> {
     let users = this.users;
+
+    if (search) {
+      users = this.users.filter(
+        (user) =>
+          user.name.toLowerCase().includes(search.toLowerCase()) ||
+          user.registration.toLowerCase().includes(search.toLowerCase())
+      );
+    }
 
     switch (sort) {
       case "asc":

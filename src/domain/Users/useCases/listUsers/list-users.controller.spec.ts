@@ -49,6 +49,35 @@ describe("[GET] /users", () => {
     expect(response.body.total).toBe(2);
   });
 
+  it("should be able to filter users by name or registration", async () => {
+    const responseAuth = await request(app).post("/auth/session").send({
+      login: "user-test",
+      password: "123",
+    });
+
+    const { token } = responseAuth.body;
+
+    const response = await request(app)
+      .get("/users")
+      .set({ Authorization: `Bearer ${token}` })
+      .query({ search: "153252fs" });
+
+    expect(response.status).toBe(200);
+    expect(response.body.total).toBe(1);
+    expect(response.body.users[0].name).toBe("Random user");
+    expect(response.body.users[0].registration).toBe("153252fs");
+
+    const response2 = await request(app)
+      .get("/users")
+      .set({ Authorization: `Bearer ${token}` })
+      .query({ search: "Random user" });
+
+    expect(response2.status).toBe(200);
+    expect(response2.body.total).toBe(2);
+    expect(response2.body.users[0].name).toBe("Random user");
+    expect(response2.body.users[0].registration).toBe("153252fs");
+  });
+
   it("should not be able to list all users if not authenticated", async () => {
     const response = await request(app).get("/users");
 

@@ -8,7 +8,11 @@ export interface IUsersRepository {
   findByLogin(login: string): Promise<User | undefined>;
   findByRegistration(registration: string): Promise<User | undefined>;
   findById(id: string): Promise<User | undefined>;
-  list(page: number, sort?: string): Promise<IUsersPaginationData>;
+  list(
+    page: number,
+    sort?: string,
+    search?: string
+  ): Promise<IUsersPaginationData>;
   update(user: User, data: IUpdateUserDTO): Promise<void>;
   delete(user: User): Promise<void>;
 }

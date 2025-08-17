@@ -7,6 +7,7 @@ import { ListUsersUseCase } from "./list-users.useCase";
 const queryParamsSchema = z.object({
   sort: z.enum(["asc", "desc", "operator", "admin"]).optional(),
   page: z.coerce.number().optional(),
+  search: z.string().optional(),
 });
 
 type ListUsersQueryParams = z.infer<typeof queryParamsSchema>;
@@ -18,11 +19,11 @@ export class ListUsersController {
   ) {
     const queryParams = request.query;
 
-    const { page, sort } = queryParamsSchema.parse(queryParams);
+    const { page, sort, search } = queryParamsSchema.parse(queryParams);
 
     const listUsersUseCase = container.resolve(ListUsersUseCase);
 
-    const paginatedUsers = await listUsersUseCase.execute(sort, page);
+    const paginatedUsers = await listUsersUseCase.execute(sort, page, search);
 
     return response.status(200).send(paginatedUsers);
   }

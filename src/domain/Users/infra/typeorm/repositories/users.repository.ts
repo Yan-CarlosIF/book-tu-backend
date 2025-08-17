@@ -1,5 +1,5 @@
 import { hash } from "bcryptjs";
-import { getRepository, Repository } from "typeorm";
+import { Brackets, getRepository, Repository } from "typeorm";
 
 import { ICreateUserDTO } from "@/domain/Users/dto/Icreate-user.dto";
 import { IUpdateUserDTO } from "@/domain/Users/dto/Iupdate-user.dto";
@@ -54,8 +54,25 @@ export class UsersRepository implements IUsersRepository {
     });
   }
 
-  async list(page: number, sort?: string): Promise<IUsersPaginationData> {
+  async list(
+    page: number,
+    sort?: string,
+    search?: string
+  ): Promise<IUsersPaginationData> {
     const queryBuilder = this.repository.createQueryBuilder("users");
+
+    if (search) {
+      const likeSearch = `%${search}%`;
+
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.where("users.name ILIKE :search", { search: likeSearch }).orWhere(
+            "users.registration ILIKE :search",
+            { search: likeSearch }
+          );
+        })
+      );
+    }
 
     switch (sort) {
       case "asc":
