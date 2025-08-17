@@ -9,6 +9,7 @@ const queryParamsSchema = z.object({
     .enum(["asc", "desc", "oldest", "latest", "price-asc", "price-desc"])
     .optional(),
   page: z.coerce.number().min(1).optional(),
+  search: z.string().optional(),
 });
 
 type IQueryParams = z.infer<typeof queryParamsSchema>;
@@ -18,7 +19,7 @@ export class ListBooksWithPaginationController {
     request: Request<unknown, unknown, unknown, IQueryParams>,
     response: Response
   ) {
-    const { sort, page } = queryParamsSchema.parse(request.query);
+    const { sort, page, search } = queryParamsSchema.parse(request.query);
 
     const listBooksWithPaginationUseCase = container.resolve(
       ListBooksWithPaginationUseCase
@@ -26,7 +27,8 @@ export class ListBooksWithPaginationController {
 
     const paginatedBooks = await listBooksWithPaginationUseCase.execute(
       page,
-      sort
+      sort,
+      search
     );
 
     return response.status(200).json(paginatedBooks);

@@ -85,4 +85,74 @@ describe("[GET] /books", () => {
     expect(body.total).toBe(20);
     expect(body.page).toBe(2);
   });
+
+  it("should be able to filter books by identifier", async () => {
+    const responseAuth = await request(app).post("/auth/session").send({
+      login: "user-test",
+      password: "123",
+    });
+
+    const { token } = responseAuth.body;
+
+    const { body } = await request(app)
+      .get("/books")
+      .set({
+        Authorization: `Bearer ${token}`,
+      })
+      .query({ search: "12311" });
+
+    expect(body.books.length).toBe(1);
+    expect(body.total).toBe(1);
+    expect(body.page).toBe(1);
+    expect(body.books[0].identifier).toBe("12311");
+  });
+
+  it("should be able to filter books by title", async () => {
+    const responseAuth = await request(app).post("/auth/session").send({
+      login: "user-test",
+      password: "123",
+    });
+
+    const { token } = responseAuth.body;
+
+    const { body } = await request(app)
+      .get("/books")
+      .set({
+        Authorization: `Bearer ${token}`,
+      })
+      .query({ search: "Random book 10" });
+
+    expect(body.books.length).toBe(1);
+    expect(body.total).toBe(1);
+    expect(body.page).toBe(1);
+    expect(body.books[0].title).toBe("Random book 10");
+  });
+
+  it("should be able to filter books by author", async () => {
+    const responseAuth = await request(app).post("/auth/session").send({
+      login: "user-test",
+      password: "123",
+    });
+
+    const { token } = responseAuth.body;
+
+    const { body } = await request(app)
+      .get("/books")
+      .set({
+        Authorization: `Bearer ${token}`,
+      })
+      .query({ search: "Random author 10" });
+
+    expect(body.books.length).toBe(1);
+    expect(body.total).toBe(1);
+    expect(body.page).toBe(1);
+    expect(body.books[0].author).toBe("Random author 10");
+  });
+
+  it("should not be able to list all books without authentication", async () => {
+    const response = await request(app).get("/books");
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toEqual("Usuário não autenticado");
+  });
 });

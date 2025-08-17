@@ -9,7 +9,7 @@ export interface IBooksRepository {
   findBooksByIds(ids: string[]): Promise<Book[]>;
   findBookByIdentifier(identifier: string): Promise<Book | undefined>;
   list(): Promise<Book[]>;
-  listWithPagination(page: number, sort?: string): Promise<IPaginationData>;
+  listWithPagination(page: number, sort?: string, search?: string): Promise<IPaginationData>;
   update(Book: Book, data: IUpdateBookDTO): Promise<void>;
   delete(Book: Book): Promise<void>;
 }

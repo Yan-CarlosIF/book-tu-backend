@@ -1,4 +1,4 @@
-import { getRepository, Repository } from "typeorm";
+import { Brackets, getRepository, Repository } from "typeorm";
 
 import { ICreateBookDTO } from "@/domain/Books/dto/Icreate-book.dto";
 import { IPaginationData } from "@/domain/Books/dto/Ipagination-data.dto";
@@ -56,11 +56,26 @@ export class BooksRepository implements IBooksRepository {
 
   async listWithPagination(
     page: number,
-    sort?: string
+    sort?: string,
+    search?: string
   ): Promise<IPaginationData> {
     const queryBuilder = this.repository.createQueryBuilder("books");
 
     queryBuilder.leftJoinAndSelect("books.categories", "categories");
+
+    if (search) {
+      const likeSearch = `%${search}%`;
+      
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.where("books.title ILIKE :search", { search: likeSearch })
+            .orWhere("books.author ILIKE :search", { search: likeSearch })
+            .orWhere("books.identifier ILIKE :search", {
+              search: likeSearch,
+            });
+        })
+      );
+    }
 
     switch (sort) {
       case "asc":

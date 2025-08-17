@@ -10,14 +10,15 @@ export class ListBooksWithPaginationUseCase {
     private booksRepository: IBooksRepository
   ) {}
 
-  async execute(page?: number, sort?: string) {
+  async execute(page?: number, sort?: string, search?: string) {
     if (!page || page < 1) {
       page = 1;
     }
 
     const paginatedBooks = await this.booksRepository.listWithPagination(
       page,
-      sort
+      sort,
+      search
     );
 
     return {

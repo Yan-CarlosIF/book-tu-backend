@@ -44,9 +44,19 @@ export class BooksRepositoryInMemory implements IBooksRepository {
 
   async listWithPagination(
     page: number,
-    sort?: string
+    sort?: string,
+    search?: string
   ): Promise<IPaginationData> {
     let books = this.books;
+
+    if (search) {
+      books = this.books.filter(
+        (book) =>
+          book.title.toLowerCase().includes(search.toLowerCase()) ||
+          book.author.toLowerCase().includes(search.toLowerCase()) ||
+          book.identifier.toLowerCase().includes(search.toLowerCase())
+      );
+    }
 
     switch (sort) {
       case "asc":
