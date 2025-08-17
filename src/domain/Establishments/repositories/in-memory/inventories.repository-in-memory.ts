@@ -26,12 +26,22 @@ export class InventoriesRepositoryInMemory implements IInventoriesRepository {
     return this.inventories.find((inventory) => inventory.id === id);
   }
 
-  async list(page: number, establishmentId?: string): Promise<IPaginationData> {
+  async list(
+    page: number,
+    establishmentId?: string,
+    search?: string
+  ): Promise<IPaginationData> {
     let filteredInventories = this.inventories;
 
     if (establishmentId) {
       filteredInventories = this.inventories.filter(
         (inventory) => inventory.establishment_id === establishmentId
+      );
+    }
+
+    if (search) {
+      filteredInventories = this.inventories.filter(
+        (inventory) => inventory.identifier === Number(search)
       );
     }
 

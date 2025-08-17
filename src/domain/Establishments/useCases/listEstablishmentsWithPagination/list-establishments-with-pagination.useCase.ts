@@ -10,13 +10,13 @@ export class ListEstablishmentsWithPaginationUseCase {
     private establishmentsRepository: IEstablishmentsRepository
   ) {}
 
-  async execute(page: number = 1) {
+  async execute(page: number = 1, search?: string) {
     if (!page || page < 1) {
       page = 1;
     }
 
     const establishments =
-      await this.establishmentsRepository.listWithPagination(page);
+      await this.establishmentsRepository.listWithPagination(page, search);
 
     return {
       establishments: establishments.data as Establishment[],

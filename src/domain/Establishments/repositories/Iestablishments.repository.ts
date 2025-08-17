@@ -8,7 +8,7 @@ export interface IEstablishmentsRepository {
   create(data: ICreateEstablishmentDTO): Promise<void>;
   findByCnpj(cnpj: string): Promise<Establishment | undefined>;
   findById(id: string): Promise<Establishment | undefined>;
-  listWithPagination(page: number): Promise<IPaginationData>;
+  listWithPagination(page: number, sort?: string): Promise<IPaginationData>;
   list(): Promise<Establishment[]>;
   update(
     establishment: Establishment,

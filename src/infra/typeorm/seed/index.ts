@@ -45,12 +45,12 @@ export async function seed() {
     permission: Permission.ADMIN,
   });
 
-  const yan = usersRepository.create({
-    name: "Yan",
-    login: "yanzin",
+  const operator = usersRepository.create({
+    name: "Operador",
+    login: "operator-test",
     password: hashedPassword,
     registration: "143435642367",
-    role: "Developer",
+    role: "first operator",
     permission: Permission.OPERATOR,
   });
 
@@ -74,7 +74,7 @@ export async function seed() {
     }))
   );
 
-  await usersRepository.save([yan, admin, ...users]);
+  await usersRepository.save([operator, admin, ...users]);
   await categoriesRepository.save(categories);
 
   // ---------- Livros ----------

@@ -16,7 +16,11 @@ export class StocksRepository implements IStocksRepository {
     this.stockItems = getRepository(StockItem);
   }
 
-  async listStocksItems(page: number, id?: string): Promise<IPaginationData> {
+  async listStocksItems(
+    page: number,
+    id?: string,
+    search?: string
+  ): Promise<IPaginationData> {
     const queryBuilder = this.stockItems.createQueryBuilder("stock_items");
 
     queryBuilder
@@ -26,6 +30,10 @@ export class StocksRepository implements IStocksRepository {
 
     if (id) {
       queryBuilder.where("establishment.id = :id", { id: id });
+    }
+
+    if (search) {
+      queryBuilder.where("book.title ILIKE :search", { search: `%${search}%` });
     }
 
     return await pagination<StockItem>(queryBuilder, page, 10);

@@ -29,11 +29,21 @@ export class EstablishmentsRepositoryInMemory
     return this.establishments.find((establishment) => establishment.id === id);
   }
 
-  async listWithPagination(page: number): Promise<IPaginationData> {
-    const establishments = this.establishments.slice(
-      (page - 1) * 10,
-      page * 10
-    );
+  async listWithPagination(
+    page: number,
+    search?: string
+  ): Promise<IPaginationData> {
+    let establishments = this.establishments;
+
+    if (search) {
+      establishments = this.establishments.filter(
+        (establishment) =>
+          establishment.name.toLowerCase().includes(search.toLowerCase()) ||
+          establishment.cnpj.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    establishments = this.establishments.slice((page - 1) * 10, page * 10);
 
     return {
       data: establishments,

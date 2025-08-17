@@ -6,6 +6,7 @@ import { ListEstablishmentsWithPaginationUseCase } from "./list-establishments-w
 
 const queryParamsSchema = z.object({
   page: z.coerce.number().optional(),
+  search: z.string().optional(),
 });
 
 type IQueryParams = z.infer<typeof queryParamsSchema>;
@@ -15,14 +16,14 @@ export class ListEstablishmentsWithPaginationController {
     request: Request<unknown, unknown, unknown, IQueryParams>,
     response: Response
   ) {
-    const { page } = queryParamsSchema.parse(request.query);
+    const { page, search } = queryParamsSchema.parse(request.query);
 
     const listEstablishmentsWithPaginationUseCase = container.resolve(
       ListEstablishmentsWithPaginationUseCase
     );
 
     const paginatedEstablishments =
-      await listEstablishmentsWithPaginationUseCase.execute(page);
+      await listEstablishmentsWithPaginationUseCase.execute(page, search);
 
     return response.status(200).json(paginatedEstablishments);
   }

@@ -9,11 +9,11 @@ export class ListInventoriesUseCase {
     private inventoriesRepository: IInventoriesRepository
   ) {}
 
-  async execute(page?: number, establishmentId?: string) {
+  async execute(page?: number, establishmentId?: string, search?: string) {
     if (!page || page < 1) {
       page = 1;
     }
 
-    return await this.inventoriesRepository.list(page, establishmentId);
+    return await this.inventoriesRepository.list(page, establishmentId, search);
   }
 }

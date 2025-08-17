@@ -7,7 +7,11 @@ import { Stock } from "../infra/typeorm/entities/Stock";
 export interface IInventoriesRepository {
   create(data: ICreateInventoryDTO): Promise<void>;
   findInventoryById(id: string): Promise<Inventory | undefined>;
-  list(page: number, establishmentId?: string): Promise<IPaginationData>;
+  list(
+    page: number,
+    establishmentId?: string,
+    search?: string
+  ): Promise<IPaginationData>;
   update(
     id: string,
     data: { book_id: string; quantity: number }[]

@@ -36,11 +36,18 @@ describe("[GET] /stocks", () => {
     expect(response.body.data.length).toBeGreaterThan(0);
   });
 
-  it("should not be able to list stock items if user is not authenticated", async () => {
-    const response = await request(app).get("/stocks");
+  it("should be able to filter stock items by book title", async () => {
+    const response = await request(app)
+      .get("/stocks")
+      .query({ page: 1, search: "A Filha do Vento" })
+      .set({ Authorization: `Bearer ${token}` });
 
-    expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Usuário não autenticado");
+    expect(response.status).toBe(200);
+    expect(response.body.data.length).toBeGreaterThan(0);
+
+    for (const stockItem of response.body.data) {
+      expect(stockItem.book.title).toBe("A Filha do Vento");
+    }
   });
 
   it("should be able to list stock items per establishment", async () => {
@@ -58,5 +65,12 @@ describe("[GET] /stocks", () => {
     expect(response.body.data[0].stock.establishment_id).toEqual(
       establishmentId
     );
+  });
+
+  it("should not be able to list stock items if user is not authenticated", async () => {
+    const response = await request(app).get("/stocks");
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe("Usuário não autenticado");
   });
 });

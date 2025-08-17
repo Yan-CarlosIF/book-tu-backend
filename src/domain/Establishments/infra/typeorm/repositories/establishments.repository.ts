@@ -1,4 +1,4 @@
-import { getRepository, Repository } from "typeorm";
+import { Brackets, getRepository, Repository } from "typeorm";
 
 import { IPaginationData } from "@/domain/Books/dto/Ipagination-data.dto";
 import { ICreateEstablishmentDTO } from "@/domain/Establishments/dto/Icreate-establishment.dto";
@@ -38,8 +38,26 @@ export class EstablishmentsRepository implements IEstablishmentsRepository {
     return await this.repository.findOne({ id });
   }
 
-  async listWithPagination(page: number): Promise<IPaginationData> {
-    const establishmentsQueryBuilder = this.repository.createQueryBuilder();
+  async listWithPagination(
+    page: number,
+    search?: string
+  ): Promise<IPaginationData> {
+    const establishmentsQueryBuilder =
+      this.repository.createQueryBuilder("establishments");
+
+    if (search) {
+      const likeSearch = `%${search}%`;
+
+      establishmentsQueryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.where("establishments.name ILIKE :search", {
+            search: likeSearch,
+          }).orWhere("establishments.cnpj ILIKE :search", {
+            search: likeSearch,
+          });
+        })
+      );
+    }
 
     return await pagination<Establishment>(
       establishmentsQueryBuilder,

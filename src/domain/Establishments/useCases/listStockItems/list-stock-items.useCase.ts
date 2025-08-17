@@ -9,11 +9,15 @@ export class ListStockItemsUseCase {
     private stocksRepository: IStocksRepository
   ) {}
 
-  async execute(page?: number, establishmentId?: string) {
+  async execute(page?: number, establishmentId?: string, search?: string) {
     if (!page || page < 1) {
       page = 1;
     }
 
-    return await this.stocksRepository.listStocksItems(page, establishmentId);
+    return await this.stocksRepository.listStocksItems(
+      page,
+      establishmentId,
+      search
+    );
   }
 }

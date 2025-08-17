@@ -1,4 +1,4 @@
-import { getRepository, Repository } from "typeorm";
+import { Brackets, getRepository, Repository } from "typeorm";
 
 import { IPaginationData } from "@/domain/Books/dto/Ipagination-data.dto";
 import { ICreateInventoryDTO } from "@/domain/Establishments/dto/Icreate-inventory.dto";
@@ -51,7 +51,11 @@ export class InventoriesRepository implements IInventoriesRepository {
     );
   }
 
-  async list(page: number, establishmentId?: string): Promise<IPaginationData> {
+  async list(
+    page: number,
+    establishmentId?: string,
+    search?: string
+  ): Promise<IPaginationData> {
     const queryBuilder = this.repository.createQueryBuilder("inventories");
 
     queryBuilder
@@ -62,6 +66,14 @@ export class InventoriesRepository implements IInventoriesRepository {
 
     if (establishmentId) {
       queryBuilder.where("establishment.id = :id", { id: establishmentId });
+    }
+
+    if (search) {
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.where("inventories.identifier = :search", { search });
+        })
+      );
     }
 
     return await pagination<Inventory>(queryBuilder, page, 10);

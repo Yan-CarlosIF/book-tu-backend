@@ -7,6 +7,7 @@ import { ListInventoriesUseCase } from "./list-inventories.useCase";
 const queryParamsSchema = z.object({
   page: z.coerce.number().optional(),
   establishmentId: z.string().uuid().optional(),
+  search: z.string().optional(),
 });
 
 type queryParams = z.infer<typeof queryParamsSchema>;
@@ -16,13 +17,16 @@ export class ListInventoriesController {
     request: Request<unknown, unknown, unknown, queryParams>,
     response: Response
   ) {
-    const { page, establishmentId } = queryParamsSchema.parse(request.query);
+    const { page, establishmentId, search } = queryParamsSchema.parse(
+      request.query
+    );
 
     const listInventoriesUseCase = container.resolve(ListInventoriesUseCase);
 
     const paginatedInventories = await listInventoriesUseCase.execute(
       page,
-      establishmentId
+      establishmentId,
+      search
     );
 
     return response.status(200).json(paginatedInventories);

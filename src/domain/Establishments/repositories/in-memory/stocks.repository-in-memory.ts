@@ -26,17 +26,27 @@ export class StocksRepositoryInMemory implements IStocksRepository {
     });
 
     stock1.books = newStockItems;
-    
+
     this.stocks.push(stock1);
     this.stockItems.push(...newStockItems);
   }
 
-  async listStocksItems(page: number, id?: string): Promise<IPaginationData> {
+  async listStocksItems(
+    page: number,
+    id?: string,
+    search?: string
+  ): Promise<IPaginationData> {
     let filteredItems = this.stockItems;
 
     if (id) {
       filteredItems = this.stockItems.filter(
         (stockItem) => stockItem.stock.establishment.id === id
+      );
+    }
+
+    if (search) {
+      filteredItems = this.stockItems.filter((stockItem) =>
+        stockItem.book.title.includes(search)
       );
     }
 

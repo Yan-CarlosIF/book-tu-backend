@@ -37,6 +37,17 @@ describe("[GET] /inventories", () => {
     expect(response.body.total).toBeGreaterThan(0);
   });
 
+  it("should be able to filter inventories by identifier number", async () => {
+    const response = await request(app)
+      .get("/inventories")
+      .query({ search: "1" })
+      .set({ Authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(200);
+    expect(response.body.data.length).toBe(1);
+    expect(response.body.data[0].identifier).toBe(1);
+  });
+
   it("should not be able to list inventories if user is not authenticated", async () => {
     const response = await request(app).get("/inventories");
 
