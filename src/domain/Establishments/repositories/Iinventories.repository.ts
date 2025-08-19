@@ -6,7 +6,10 @@ import { Stock } from "../infra/typeorm/entities/Stock";
 
 export interface IInventoriesRepository {
   create(data: ICreateInventoryDTO): Promise<void>;
-  findInventoryById(id: string): Promise<Inventory | undefined>;
+  findInventoryById(
+    id: string,
+    withBooks?: boolean
+  ): Promise<Inventory | undefined>;
   list(
     page: number,
     establishmentId?: string,
@@ -18,4 +21,8 @@ export interface IInventoriesRepository {
   ): Promise<void>;
   delete(id: string): Promise<void>;
   process(inventory: Inventory, stock: Stock): Promise<void>;
+  getInventoryBooks(
+    page: number,
+    id: string
+  ): Promise<IPaginationData>;
 }

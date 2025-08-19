@@ -89,7 +89,7 @@ describe("[POST] /inventories/process/:id", () => {
     const {
       body: { token: tokenOperator },
     } = await request(app).post("/auth/session").send({
-      login: "yanzin",
+      login: "operator-test",
       password: "123",
     });
 

@@ -12,7 +12,7 @@ export class GetInventoryUseCase {
   ) {}
 
   async execute(id: string) {
-    const inventory = await this.inventoriesRepository.findInventoryById(id);
+    const inventory = await this.inventoriesRepository.findInventoryById(id, true);
 
     if (!inventory) {
       throw new AppError("Inventário não encontrado", 404);

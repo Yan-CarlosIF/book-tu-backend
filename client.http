@@ -236,3 +236,9 @@ Authorization: Bearer {{authToken}}
 # @name processInventory
 POST {{baseUrl}}/inventories/process/53672b90-291b-49a0-8bcd-8044aba486f7
 Authorization: Bearer {{authToken}}
+
+###
+
+# @name getInventoryBooks
+GET {{baseUrl}}/inventories/082f0c32-f088-42c3-8bc8-f37a9ebba9f0/books
+Authorization: Bearer {{authToken}}

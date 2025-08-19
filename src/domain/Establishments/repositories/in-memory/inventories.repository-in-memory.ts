@@ -106,4 +106,24 @@ export class InventoriesRepositoryInMemory implements IInventoriesRepository {
   async process(inventory: Inventory): Promise<void> {
     console.log(inventory);
   }
+
+  async getInventoryBooks(page: number, id: string): Promise<IPaginationData> {
+    const inventory = this.inventories.find((inventory) => inventory.id === id);
+
+    if (!inventory) {
+      throw new Error("Inventory not found");
+    }
+
+    const startIndex = (page - 1) * 10;
+    const endIndex = page * 10;
+
+    const paginatedBooks = inventory.books.slice(startIndex, endIndex);
+
+    return {
+      data: paginatedBooks,
+      page,
+      total: inventory.books.length,
+      lastPage: Math.ceil(inventory.books.length / 10),
+    };
+  }
 }

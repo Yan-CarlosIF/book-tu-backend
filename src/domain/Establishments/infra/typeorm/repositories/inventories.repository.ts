@@ -37,16 +37,22 @@ export class InventoriesRepository implements IInventoriesRepository {
     await this.repository.save(inventory);
   }
 
-  async findInventoryById(id: string): Promise<Inventory | undefined> {
+  async findInventoryById(
+    id: string,
+    withBooks = false
+  ): Promise<Inventory | undefined> {
+    const relations = ["establishment"];
+
+    if (withBooks) {
+      relations.push("books");
+      relations.push("books.book");
+      relations.push("books.book.categories");
+    }
+
     return await this.repository.findOne(
       { id },
       {
-        relations: [
-          "books",
-          "books.book",
-          "books.book.categories",
-          "establishment",
-        ],
+        relations,
       }
     );
   }
@@ -58,11 +64,10 @@ export class InventoriesRepository implements IInventoriesRepository {
   ): Promise<IPaginationData> {
     const queryBuilder = this.repository.createQueryBuilder("inventories");
 
-    queryBuilder
-      .leftJoinAndSelect("inventories.establishment", "establishment")
-      .leftJoinAndSelect("inventories.books", "books")
-      .leftJoinAndSelect("books.book", "book")
-      .leftJoinAndSelect("book.categories", "categories");
+    queryBuilder.leftJoinAndSelect(
+      "inventories.establishment",
+      "establishment"
+    );
 
     if (establishmentId) {
       queryBuilder.where("establishment.id = :id", { id: establishmentId });
@@ -134,5 +139,18 @@ export class InventoriesRepository implements IInventoriesRepository {
       { id: inventory.id },
       { status: Status.PROCESSED }
     );
+  }
+
+  async getInventoryBooks(page: number, id: string): Promise<IPaginationData> {
+    const queryBuilder =
+      getRepository(InventoryBooks).createQueryBuilder("inventory_books");
+
+    queryBuilder
+      .where("inventory_books.inventory_id = :id", { id })
+      .leftJoinAndSelect("inventory_books.book", "book")
+      .leftJoinAndSelect("book.categories", "categories")
+      .getMany();
+
+    return await pagination<InventoryBooks>(queryBuilder, page, 10);
   }
 }

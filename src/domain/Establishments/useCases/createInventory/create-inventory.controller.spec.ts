@@ -78,7 +78,6 @@ describe("[POST] /inventories", () => {
     expect(inventory.total_quantity).toBe(5 * booksIds.length);
     expect(inventory.establishment_id).toBe(establishmentId);
     expect(inventory.status).toBe("unprocessed");
-    expect(inventory.books.length).toBe(5);
   });
 
   it("should not be able to create a new inventory if user is not authenticated", async () => {
