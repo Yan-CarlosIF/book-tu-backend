@@ -51,7 +51,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "example": "Incorrect password" }
+                    "message": { "example": "Credenciais incorretas" }
                   }
                 }
               }
@@ -64,7 +64,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "example": "User not found" }
+                    "message": { "example": "Usuário não encontrado" }
                   }
                 }
               }
@@ -101,7 +101,10 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "users": { "type": "array", "items": { "type": "object" } },
+                    "users": {
+                      "type": "array",
+                      "items": { "$ref": "#/definitions/User" }
+                    },
                     "total": { "type": "integer" },
                     "page": { "type": "integer" },
                     "lastPage": { "type": "integer" }
@@ -119,8 +122,8 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
                     }
                   }
@@ -172,8 +175,8 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
                     }
                   }
@@ -188,7 +191,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "example": "User already exists" }
+                    "message": { "example": "Usuário já cadastrado" }
                   }
                 }
               }
@@ -211,7 +214,6 @@
           }
         ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -220,10 +222,14 @@
                   "login": { "type": "string" },
                   "name": { "type": "string" },
                   "password": { "type": "string" },
-                  "permission": { "type": "string" },
+                  "permission": {
+                    "type": "string",
+                    "enum": ["admin", "user"]
+                  },
                   "registration": { "type": "string" },
                   "role": { "type": "string" }
-                }
+                },
+                "required": []
               }
             }
           }
@@ -239,8 +245,8 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
                     }
                   }
@@ -271,7 +277,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "example": "You cannot delete yourself" }
+                    "message": {
+                      "example": "Você não pode deletar sua própria conta"
+                    }
                   }
                 }
               }
@@ -286,8 +294,8 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
                     }
                   }
@@ -302,7 +310,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "example": "User does not have permission" }
+                    "message": {
+                      "example": "Usuário não tem permissão de admin"
+                    }
                   }
                 }
               }
@@ -320,7 +330,7 @@
           "200": {
             "description": "Dados do usuário",
             "content": {
-              "application/json": { "schema": { "type": "object" } }
+              "application/json": { "schema": { "$ref": "#/definitions/User" } }
             }
           },
           "401": {
@@ -332,8 +342,8 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
                     }
                   }
@@ -359,7 +369,7 @@
                   "properties": {
                     "books": {
                       "type": "array",
-                      "items": { "type": "object" }
+                      "items": { "$ref": "#/definitions/Book" }
                     },
                     "total": { "type": "integer" },
                     "page": { "type": "integer" },
@@ -378,8 +388,8 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
                     }
                   }
@@ -400,6 +410,7 @@
               "schema": {
                 "type": "object",
                 "required": [
+                  "identifier",
                   "title",
                   "author",
                   "release_year",
@@ -407,11 +418,12 @@
                   "categoryIds"
                 ],
                 "properties": {
+                  "identifier": { "type": "string" },
                   "title": { "type": "string" },
                   "author": { "type": "string" },
                   "release_year": { "type": "integer" },
                   "price": { "type": "number" },
-                  "description": { "type": "string" },
+                  "description": { "type": "string", "nullable": true },
                   "categoryIds": {
                     "type": "array",
                     "items": { "type": "string" }
@@ -432,9 +444,39 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoria inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "example": "Uma ou mais categorias não foram encontradas"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Livro com o mesmo identificador já cadastrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "example": "Livro com o mesmo identificador já cadastrado"
                     }
                   }
                 }
@@ -456,7 +498,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "type": "object" }
+                  "items": { "$ref": "#/definitions/Book" }
                 }
               }
             }
@@ -470,8 +512,8 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
                     }
                   }
@@ -483,6 +525,49 @@
       }
     },
     "/books/{id}": {
+      "get": {
+        "tags": ["Books"],
+        "summary": "Retorna um livro",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Livro encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Book"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "patch": {
         "summary": "Atualiza um livro",
         "tags": ["Books"],
@@ -511,7 +596,8 @@
                     "type": "array",
                     "items": { "type": "string" }
                   }
-                }
+                },
+                "required": []
               }
             }
           }
@@ -527,9 +613,44 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoria inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        {
+                          "example": "Uma ou mais categorias não foram encontradas"
+                        },
+                        { "example": "Livro inexistente" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Livro com o mesmo identificador já cadastrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "example": "Livro com o mesmo identificador já cadastrado"
                     }
                   }
                 }
@@ -551,7 +672,20 @@
           }
         ],
         "responses": {
-          "200": { "description": "Livro removido" },
+          "204": { "description": "Livro removido" },
+          "404": {
+            "description": "Livro inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "Livro inexistente" }
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "description": "Não autenticado",
             "content": {
@@ -561,8 +695,8 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
                     }
                   }
@@ -577,7 +711,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "example": "User does not have permission" }
+                    "message": {
+                      "example": "Usuário não tem permissão de admin"
+                    }
                   }
                 }
               }
@@ -601,7 +737,7 @@
                   "properties": {
                     "categories": {
                       "type": "array",
-                      "items": { "type": "object" }
+                      "items": { "$ref": "#/definitions/Category" }
                     },
                     "total": { "type": "integer" },
                     "page": { "type": "integer" },
@@ -620,8 +756,8 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
                     }
                   }
@@ -651,6 +787,19 @@
         },
         "responses": {
           "201": { "description": "Categoria criada" },
+          "400": {
+            "description": "Categoria já cadastrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "Categoria já cadastrada" }
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "description": "Não autenticado",
             "content": {
@@ -660,8 +809,8 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
                     }
                   }
@@ -684,7 +833,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "type": "object" }
+                  "items": { "$ref": "#/definitions/Category" }
                 }
               }
             }
@@ -698,8 +847,8 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
                     }
                   }
@@ -738,6 +887,32 @@
         },
         "responses": {
           "204": { "description": "Categoria atualizada" },
+          "400": {
+            "description": "Categoria já cadastrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "Categoria já cadastrada" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoria não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "Categoria não encontrada" }
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "description": "Não autenticado",
             "content": {
@@ -747,8 +922,8 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
                     }
                   }
@@ -781,10 +956,23 @@
                   "properties": {
                     "message": {
                       "oneOf": [
-                        { "example": "Token not found" },
-                        { "example": "Invalid token" }
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
                       ]
                     }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoria não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "Categoria não encontrada" }
                   }
                 }
               }
@@ -797,13 +985,891 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "example": "User does not have permission" }
+                    "message": {
+                      "example": "Usuário não tem permissão de admin"
+                    }
                   }
                 }
               }
             }
           }
         }
+      }
+    },
+    "/establishments": {
+      "get": {
+        "tags": ["Establishments"],
+        "summary": "Lista estabelecimentos com paginação",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de estabelecimentos com paginação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "establishments": {
+                      "type": "array",
+                      "items": { "$ref": "#/definitions/Establishment" }
+                    },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "lastPage": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Establishments"],
+        "summary": "Cria um novo estabelecimento",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "cnpj": {
+                    "type": "string",
+                    "pattern": "^\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}$"
+                  },
+                  "state": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "district": {
+                    "type": "string"
+                  },
+                  "cep": {
+                    "type": "string",
+                    "pattern": "^\\d{5}-\\d{3}$"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "required": ["name", "cnpj", "state", "city", "district", "cep"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Establishment criado com sucesso"
+          },
+          "400": {
+            "description": "Estabelecimento já cadastrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "Estabelecimento já cadastrado" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/establishments/all": {
+      "get": {
+        "tags": ["Establishments"],
+        "summary": "List todos os estabelecimentos sem paginação",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de estabelecimentos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Establishment"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/establishments/{id}": {
+      "patch": {
+        "tags": ["Establishments"],
+        "summary": "Atualiza um estabelecimento",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "cnpj": {
+                    "type": "string",
+                    "pattern": "^\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}$"
+                  },
+                  "state": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "district": {
+                    "type": "string"
+                  },
+                  "cep": {
+                    "type": "string",
+                    "pattern": "^\\d{5}-\\d{3}$"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "required": []
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Estabelecimento atualizado com successo"
+          },
+          "404": {
+            "description": "Estabelecimento não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "Estabelecimento não encontrado" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Establishments"],
+        "summary": "Deleta um estabelecimento",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estabelecimento deletado com sucesso"
+          },
+          "403": {
+            "description": "Não tem permissão para deletar o estabelecimento",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "example": "Não tem permissão para deletar o estabelecimento"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Estabelecimento nao encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "Estabelecimento nao encontrado" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventories": {
+      "get": {
+        "tags": ["Inventories"],
+        "summary": "Lista inventários",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "establishmentId",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inventories list retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/Inventory"
+                      }
+                    },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "lastPage": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Inventories"],
+        "summary": "Cria um novo inventário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "establishment_id": {
+                    "type": "string"
+                  },
+                  "total_quantity": {
+                    "type": "number"
+                  },
+                  "inventoryBooks": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "book_id": {
+                          "type": "string"
+                        },
+                        "quantity": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Inventário criado com successo"
+          },
+          "404": {
+            "description": "Estabelecimento não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "Estabelecimento não encontrado" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token não encontrado" },
+                        { "example": "Token Inválido" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventories/{id}": {
+      "get": {
+        "tags": ["Inventories"],
+        "summary": "Retorna um inventário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inventário lido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/Inventory",
+                      "books": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/definitions/Book"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Nao autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token nao encontrado" },
+                        { "example": "Token Invalido" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Inventories"],
+        "summary": "Atualiza um inventário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "inventoryBooks": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "book_id": {
+                          "type": "string"
+                        },
+                        "quantity": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inventário atualizado com sucesso"
+          },
+          "401": {
+            "description": "Nao autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token nao encontrado" },
+                        { "example": "Token Invalido" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Inventories"],
+        "summary": "Remove um inventário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inventário removido com sucesso"
+          },
+          "401": {
+            "description": "Nao autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token nao encontrado" },
+                        { "example": "Token Invalido" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Nao tem permissao para deletar o inventario",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "example": "Nao tem permissao para deletar o inventario"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventories/{id}/books": {
+      "get": {
+        "tags": ["Inventories"],
+        "summary": "Get inventory books",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inventory books retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/InventoryBook"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Nao autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token nao encontrado" },
+                        { "example": "Token Invalido" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventories/process/{id}": {
+      "post": {
+        "tags": ["Inventories"],
+        "summary": "Processar inventário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inventário processado com sucesso"
+          },
+          "400": {
+            "description": "Inventário já processado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "example": "Inventário já processado" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Inventário ou estabelecimento não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "example": "Inventário ou estabelecimento não encontrado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Nao autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        { "example": "Token nao encontrado" },
+                        { "example": "Token Invalido" }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "login": { "type": "string" },
+        "registration": { "type": "string" },
+        "role": { "type": "string" },
+        "permission": { "type": "string", "enum": ["admin", "operator"] }
+      }
+    },
+    "Category": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" }
+      }
+    },
+    "Book": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "identifier": { "type": "string" },
+        "title": { "type": "string" },
+        "author": { "type": "string" },
+        "price": { "type": "number" },
+        "release_year": { "type": "number" },
+        "description": { "type": "string", "nullable": true },
+        "categories": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Category" }
+        }
+      }
+    },
+    "Establishment": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "cnpj": { "type": "string" },
+        "state": { "type": "string" },
+        "city": { "type": "string" },
+        "district": { "type": "string" },
+        "cep": { "type": "string" },
+        "description": { "type": "string", "nullable": true }
+      }
+    },
+    "Inventory": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "identifier": { "type": "string" },
+        "total_quantity": { "type": "number" },
+        "establishment_id": { "type": "string" },
+        "establishment": { "$ref": "#/definitions/Establishment" },
+        "status": { "type": "string", "enum": ["unprocessed", "processed"] }
+      }
+    },
+    "InventoryBook": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "book_id": { "type": "string" },
+        "book": { "$ref": "#/definitions/Book" },
+        "inventory_id": { "type": "string" },
+        "inventory": { "$ref": "#/definitions/Inventory" },
+        "quantity": { "type": "number" }
       }
     }
   },

@@ -133,6 +133,12 @@ Authorization: Bearer {{authToken}}
 
 ###
 
+# @name listAllBooks
+GET {{baseUrl}}/books/all
+Authorization: Bearer {{authToken}}
+
+###
+
 # @name updateBook
 PATCH {{baseUrl}}/books/2a205a2d-8db2-4acd-a62c-ab10a8a1347c
 Content-Type: application/json
