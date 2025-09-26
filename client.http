@@ -134,7 +134,7 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name listAllBooks
-GET {{baseUrl}}/books/all
+GET {{baseUrl}}/books/all?search=o
 Authorization: Bearer {{authToken}}
 
 ###

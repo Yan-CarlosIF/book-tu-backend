@@ -8,6 +8,7 @@ logs
 **/*.js
 **/*.js.map
 .idea
+.vscode
 
 # Global Node.js .gitignore settings
 

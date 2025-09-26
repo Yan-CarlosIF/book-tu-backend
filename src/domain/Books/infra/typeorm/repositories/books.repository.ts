@@ -34,8 +34,27 @@ export class BooksRepository implements IBooksRepository {
     });
   }
 
-  async list(): Promise<Book[]> {
-    return await this.repository.find({ relations: ["categories"] });
+  async list(search?: string): Promise<Book[]> {
+    const queryBuilder = this.repository.createQueryBuilder("books");
+
+    queryBuilder.leftJoinAndSelect("books.categories", "categories");
+
+    if (search) {
+      const likeSearch = `%${search}%`;
+
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.where("books.title ILIKE :search", { search: likeSearch }).orWhere(
+            "books.identifier ILIKE :search",
+            {
+              search: likeSearch,
+            }
+          );
+        })
+      );
+    }
+
+    return await queryBuilder.getMany();
   }
 
   async update(book: Book, data: IUpdateBookDTO): Promise<void> {
@@ -65,7 +84,7 @@ export class BooksRepository implements IBooksRepository {
 
     if (search) {
       const likeSearch = `%${search}%`;
-      
+
       queryBuilder.andWhere(
         new Brackets((qb) => {
           qb.where("books.title ILIKE :search", { search: likeSearch })

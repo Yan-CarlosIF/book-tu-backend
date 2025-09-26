@@ -9,7 +9,7 @@ export class ListBooksUseCase {
     private booksRepository: IBooksRepository
   ) {}
 
-  async execute() {
-    return this.booksRepository.list();
+  async execute(search?: string) {
+    return this.booksRepository.list(search);
   }
 }
