@@ -9,6 +9,7 @@ const paramsSchema = z.object({
 });
 
 const updateInventoryBodySchema = z.object({
+  establishment_id: z.string().uuid(),
   inventoryBooks: z.array(
     z.object({
       book_id: z.string().uuid(),
@@ -26,11 +27,16 @@ export class UpdateInventoryController {
     response: Response
   ) {
     const { id } = paramsSchema.parse(request.params);
-    const { inventoryBooks } = updateInventoryBodySchema.parse(request.body);
+    const { inventoryBooks, establishment_id } =
+      updateInventoryBodySchema.parse(request.body);
 
     const updateInventoryUseCase = container.resolve(UpdateInventoryUseCase);
 
-    await updateInventoryUseCase.execute({ id, inventoryBooks });
+    await updateInventoryUseCase.execute({
+      id,
+      inventoryBooks,
+      establishment_id,
+    });
 
     return response.status(200).send();
   }

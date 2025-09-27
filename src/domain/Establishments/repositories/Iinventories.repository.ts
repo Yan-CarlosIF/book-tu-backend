@@ -17,6 +17,7 @@ export interface IInventoriesRepository {
   ): Promise<IPaginationData>;
   update(
     id: string,
+    establishment_id: string,
     data: { book_id: string; quantity: number }[]
   ): Promise<void>;
   delete(id: string): Promise<void>;

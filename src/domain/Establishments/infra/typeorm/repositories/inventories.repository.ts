@@ -86,6 +86,7 @@ export class InventoriesRepository implements IInventoriesRepository {
 
   async update(
     id: string,
+    establishment_id: string,
     data: { book_id: string; quantity: number }[]
   ): Promise<void> {
     const inventory = await this.repository.findOne(id, {
@@ -96,13 +97,15 @@ export class InventoriesRepository implements IInventoriesRepository {
       throw new Error("Inventory not found");
     }
 
+    inventory.establishment_id = establishment_id;
+
     await this.repository.manager.delete(InventoryBooks, {
       inventory_id: inventory.id,
     });
 
     inventory.books = data.map((book) => {
       return this.repository.manager.create(InventoryBooks, {
-        inventory,
+        inventory_id: inventory.id,
         book_id: book.book_id,
         quantity: book.quantity,
       });

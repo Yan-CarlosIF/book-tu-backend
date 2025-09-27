@@ -15,7 +15,7 @@ export class UpdateInventoryUseCase {
     private inventoriesRepository: IInventoriesRepository
   ) {}
 
-  async execute({ id, inventoryBooks }: IUpdateInventoryDTO) {
+  async execute({ id, inventoryBooks, establishment_id }: IUpdateInventoryDTO) {
     const inventory = await this.inventoriesRepository.findInventoryById(id);
 
     if (!inventory) {
@@ -37,6 +37,10 @@ export class UpdateInventoryUseCase {
       throw new AppError("Um ou mais livros não são válidos", 404);
     }
 
-    await this.inventoriesRepository.update(id, inventoryBooks);
+    await this.inventoriesRepository.update(
+      id,
+      establishment_id,
+      inventoryBooks
+    );
   }
 }
