@@ -197,7 +197,7 @@ Authorization: Bearer {{authToken}}
 
 # @name listStockItems
 
-GET {{baseUrl}}/stocks?page=2
+GET {{baseUrl}}/stocks?search=VNns7f
 Authorization: Bearer {{authToken}}
 
 ### 

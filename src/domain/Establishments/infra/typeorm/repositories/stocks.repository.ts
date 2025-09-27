@@ -1,4 +1,4 @@
-import { getRepository, Repository } from "typeorm";
+import { Brackets, getRepository, Repository } from "typeorm";
 
 import { IPaginationData } from "@/domain/Books/dto/Ipagination-data.dto";
 import { IStocksRepository } from "@/domain/Establishments/repositories/Istocks.repository";
@@ -33,7 +33,16 @@ export class StocksRepository implements IStocksRepository {
     }
 
     if (search) {
-      queryBuilder.where("book.title ILIKE :search", { search: `%${search}%` });
+      const likeSearch = `%${search}%`;
+
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.where("book.title ILIKE :search", { search: likeSearch }).orWhere(
+            "book.identifier ILIKE :search",
+            { search: likeSearch }
+          );
+        })
+      );
     }
 
     return await pagination<StockItem>(queryBuilder, page, 10);
