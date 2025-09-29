@@ -1,8 +1,7 @@
 import { Brackets, getRepository, Repository } from "typeorm";
 
-import { IPaginationData } from "@/domain/Books/dto/Ipagination-data.dto";
+import { IStockItemsPaginationDTO } from "@/domain/Establishments/dto/Istock-items-pagination.dto";
 import { IStocksRepository } from "@/domain/Establishments/repositories/Istocks.repository";
-import { pagination } from "@/utils/pagination";
 
 import { Stock } from "../entities/Stock";
 import { StockItem } from "../entities/StockItem";
@@ -20,7 +19,7 @@ export class StocksRepository implements IStocksRepository {
     page: number,
     id?: string,
     search?: string
-  ): Promise<IPaginationData> {
+  ): Promise<IStockItemsPaginationDTO> {
     const queryBuilder = this.stockItems.createQueryBuilder("stock_items");
 
     queryBuilder
@@ -45,7 +44,34 @@ export class StocksRepository implements IStocksRepository {
       );
     }
 
-    return await pagination<StockItem>(queryBuilder, page, 10);
+    const safePage = Math.max(Number(page) || 1, 1);
+
+    const total = await queryBuilder.getCount();
+
+    const totalUnitsResult = await queryBuilder
+      .clone()
+      .select("SUM(stock_items.quantity)", "sum")
+      .getRawOne<{ sum: string }>();
+
+    const totalUnits = Number(totalUnitsResult?.sum || 0);
+
+    const lastPage = Math.ceil(total / 10);
+
+    const finalPage = Math.min(safePage, lastPage);
+
+    const startIndex = (safePage - 1) * 10;
+
+    queryBuilder.skip(startIndex).take(10);
+
+    const data = await queryBuilder.getMany();
+
+    return {
+      data,
+      page: finalPage,
+      total,
+      totalUnits,
+      lastPage,
+    };
   }
 
   async findStockByEstablishmentId(id: string): Promise<Stock | undefined> {

@@ -1,5 +1,4 @@
-import { IPaginationData } from "@/domain/Books/dto/Ipagination-data.dto";
-
+import { IStockItemsPaginationDTO } from "../dto/Istock-items-pagination.dto";
 import { Stock } from "../infra/typeorm/entities/Stock";
 
 export interface IStocksRepository {
@@ -7,6 +6,6 @@ export interface IStocksRepository {
     page: number,
     id?: string,
     search?: string
-  ): Promise<IPaginationData>;
+  ): Promise<IStockItemsPaginationDTO>;
   findStockByEstablishmentId(id: string): Promise<Stock | undefined>;
 }
