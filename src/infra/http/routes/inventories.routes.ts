@@ -6,6 +6,7 @@ import { GetInventoryController } from "@/domain/Establishments/useCases/getInve
 import { GetInventoryBooksController } from "@/domain/Establishments/useCases/getInventoryBooks/get-inventory-books.controller";
 import { ListInventoriesController } from "@/domain/Establishments/useCases/listInventories/list-inventories.controller";
 import { ProcessInventoryController } from "@/domain/Establishments/useCases/processInventory/process-inventory.controller";
+import { SyncInventoryController } from "@/domain/Establishments/useCases/syncInventory/sync-inventory.controller";
 import { UpdateInventoryController } from "@/domain/Establishments/useCases/updateInventory/update-inventory.controller";
 
 import { authMiddleware } from "../middlewares/auth.middleware";
@@ -20,6 +21,7 @@ const updateInventoryController = new UpdateInventoryController();
 const deleteInventoryController = new DeleteInventoryController();
 const processInventory = new ProcessInventoryController();
 const getInventoryBooksController = new GetInventoryBooksController();
+const syncInventoryController = new SyncInventoryController();
 
 inventoriesRoutes.post("/", authMiddleware, createInventoryController.handle);
 inventoriesRoutes.get("/", authMiddleware, listInventoriesController.handle);
@@ -42,3 +44,4 @@ inventoriesRoutes.post(
   ensureUserAdmin,
   processInventory.handle
 );
+inventoriesRoutes.post("/sync", authMiddleware, syncInventoryController.handle);
