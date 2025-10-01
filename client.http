@@ -197,7 +197,7 @@ Authorization: Bearer {{authToken}}
 
 # @name listStockItems
 
-GET {{baseUrl}}/stocks?search=VNns7f
+GET {{baseUrl}}/stocks?search=A Filha do Vento
 Authorization: Bearer {{authToken}}
 
 ### 

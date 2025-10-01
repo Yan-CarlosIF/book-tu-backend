@@ -63,6 +63,7 @@ export class InventoriesRepositoryInMemory implements IInventoriesRepository {
 
   async update(
     id: string,
+    establishment_id: string,
     data: { book_id: string; quantity: number }[]
   ): Promise<void> {
     const inventory = this.inventories.find((inventory) => inventory.id === id);
@@ -90,6 +91,8 @@ export class InventoriesRepositoryInMemory implements IInventoriesRepository {
         inventory: inventory,
       };
     });
+
+    inventory.establishment_id = establishment_id;
 
     inventory.total_quantity = data.reduce(
       (total, book) => total + book.quantity,

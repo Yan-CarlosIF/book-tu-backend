@@ -1,6 +1,6 @@
-import { IPaginationData } from "@/domain/Books/dto/Ipagination-data.dto";
 import { Book } from "@/domain/Books/infra/typeorm/entities/Book";
 
+import { IStockItemsPaginationDTO } from "../../dto/Istock-items-pagination.dto";
 import { Establishment } from "../../infra/typeorm/entities/Establishment";
 import { Stock } from "../../infra/typeorm/entities/Stock";
 import { StockItem } from "../../infra/typeorm/entities/StockItem";
@@ -35,7 +35,7 @@ export class StocksRepositoryInMemory implements IStocksRepository {
     page: number,
     id?: string,
     search?: string
-  ): Promise<IPaginationData> {
+  ): Promise<IStockItemsPaginationDTO> {
     let filteredItems = this.stockItems;
 
     if (id) {
@@ -50,12 +50,18 @@ export class StocksRepositoryInMemory implements IStocksRepository {
       );
     }
 
+    const totalUnits = filteredItems.reduce(
+      (acc, stockItem) => acc + stockItem.quantity,
+      0
+    );
+
     const stockItemsPaginated = filteredItems.slice((page - 1) * 10, page * 10);
 
     return {
       data: stockItemsPaginated,
       total: filteredItems.length,
       page,
+      totalUnits,
       lastPage: Math.ceil(filteredItems.length / 10),
     };
   }

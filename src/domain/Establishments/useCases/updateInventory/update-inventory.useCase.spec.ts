@@ -2,20 +2,25 @@ import { BooksRepositoryInMemory } from "@/domain/Books/repositories/in-memory/b
 import { AppError } from "@/infra/errors/app-error";
 
 import { Status } from "../../infra/typeorm/entities/Inventory";
+import { EstablishmentsRepositoryInMemory } from "../../repositories/in-memory/establishments.repository-in-memory";
 import { InventoriesRepositoryInMemory } from "../../repositories/in-memory/inventories.repository-in-memory";
 import { UpdateInventoryUseCase } from "./update-inventory.useCase";
 
 describe("[PUT] /inventories/:id", () => {
   let inventoriesRepository: InventoriesRepositoryInMemory;
   let booksRepository: BooksRepositoryInMemory;
+  let establishmentsRepository: EstablishmentsRepositoryInMemory;
   let updateInventoryUseCase: UpdateInventoryUseCase;
 
   beforeEach(() => {
     booksRepository = new BooksRepositoryInMemory();
     inventoriesRepository = new InventoriesRepositoryInMemory();
+    establishmentsRepository = new EstablishmentsRepositoryInMemory();
+
     updateInventoryUseCase = new UpdateInventoryUseCase(
       booksRepository,
-      inventoriesRepository
+      inventoriesRepository,
+      establishmentsRepository
     );
   });
 
@@ -45,8 +50,21 @@ describe("[PUT] /inventories/:id", () => {
 
     const [inventory] = inventoriesRepository.inventories;
 
+    await establishmentsRepository.create({
+      name: "Establishment 1",
+      cep: "cep",
+      city: "city",
+      cnpj: "cnpj",
+      district: "district",
+      state: "state",
+      description: "description",
+    });
+
+    const [establishment] = establishmentsRepository.establishments;
+
     await updateInventoryUseCase.execute({
       id: inventory.id,
+      establishment_id: establishment.id,
       inventoryBooks: [
         {
           book_id: book.id,
@@ -63,6 +81,7 @@ describe("[PUT] /inventories/:id", () => {
     await expect(
       updateInventoryUseCase.execute({
         id: "id",
+        establishment_id: "establishment_id",
         inventoryBooks: [],
       })
     ).rejects.toEqual(new AppError("Inventário não encontrado", 404));
@@ -70,7 +89,7 @@ describe("[PUT] /inventories/:id", () => {
 
   it("should not be able to update a inventory if some book does not exist", async () => {
     await inventoriesRepository.create({
-      establishment_id: "establishment_id",
+      establishment_id: "establishment.id",
       inventoryBooks: [
         {
           book_id: "id",
@@ -85,6 +104,7 @@ describe("[PUT] /inventories/:id", () => {
     await expect(
       updateInventoryUseCase.execute({
         id: inventory.id,
+        establishment_id: "establishment.id",
         inventoryBooks: [
           {
             book_id: "id",
@@ -93,6 +113,41 @@ describe("[PUT] /inventories/:id", () => {
         ],
       })
     ).rejects.toEqual(new AppError("Um ou mais livros não são válidos", 404));
+  });
+
+  it("should not be able to update a inventory if establishment does not exist", async () => {
+    await booksRepository.create({
+      title: "Book 1",
+      identifier: "12314",
+      author: "Author 1",
+      release_year: 2000,
+      price: 10,
+      description: "Description 1",
+      categories: [],
+    });
+
+    const [book] = booksRepository.books;
+
+    await inventoriesRepository.create({
+      establishment_id: "establishment.id",
+      inventoryBooks: [],
+      total_quantity: 0,
+    });
+
+    const [inventory] = inventoriesRepository.inventories;
+
+    await expect(
+      updateInventoryUseCase.execute({
+        id: inventory.id,
+        establishment_id: "id",
+        inventoryBooks: [
+          {
+            book_id: book.id,
+            quantity: 1,
+          },
+        ],
+      })
+    ).rejects.toEqual(new AppError("Estabelecimento não encontrado", 404));
   });
 
   it("should not be able to update a processed inventory", async () => {
@@ -126,6 +181,7 @@ describe("[PUT] /inventories/:id", () => {
     await expect(
       updateInventoryUseCase.execute({
         id: inventory.id,
+        establishment_id: "establishment_id",
         inventoryBooks: [
           {
             book_id: book.id,

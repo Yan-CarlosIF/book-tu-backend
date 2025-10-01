@@ -4,6 +4,7 @@ import { IBooksRepository } from "@/domain/Books/repositories/Ibooks.repository"
 import { AppError } from "@/infra/errors/app-error";
 
 import { IUpdateInventoryDTO } from "../../dto/Iupdate-inventory.dto";
+import { IEstablishmentsRepository } from "../../repositories/Iestablishments.repository";
 import { IInventoriesRepository } from "../../repositories/Iinventories.repository";
 
 @injectable()
@@ -12,7 +13,9 @@ export class UpdateInventoryUseCase {
     @inject("BooksRepository")
     private booksRepository: IBooksRepository,
     @inject("InventoriesRepository")
-    private inventoriesRepository: IInventoriesRepository
+    private inventoriesRepository: IInventoriesRepository,
+    @inject("EstablishmentsRepository")
+    private establishmentsRepository: IEstablishmentsRepository
   ) {}
 
   async execute({ id, inventoryBooks, establishment_id }: IUpdateInventoryDTO) {
@@ -35,6 +38,14 @@ export class UpdateInventoryUseCase {
 
     if (books.length !== inventoryBooks.length) {
       throw new AppError("Um ou mais livros não são válidos", 404);
+    }
+
+    const establishment = await this.establishmentsRepository.findById(
+      establishment_id
+    );
+
+    if (!establishment) {
+      throw new AppError("Estabelecimento não encontrado", 404);
     }
 
     await this.inventoriesRepository.update(
